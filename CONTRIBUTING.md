@@ -52,7 +52,7 @@ python src/search.py --query "tomato, garlic"
 Or launch the FastAPI server:
 
 ```bash
-uvicorn src.app:app --reload
+uvicorn main:app --reload
 ```
 
 Visit: [http://localhost:8000/docs](http://localhost:8000/docs)
@@ -77,7 +77,7 @@ git commit -m "Add: your change summary"
 3. Push and create PR:
 
 ```bash
-git push origin feature/your-feature-name
+git push origin your-feature-name
 ```
 
 4. Go to your GitHub fork and open a Pull Request against the main branch of the original repo.
