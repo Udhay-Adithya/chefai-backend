@@ -133,3 +133,4 @@ dmypy.json
 
 # data file
 data/recipes.csv
+data/processed_recipes.json

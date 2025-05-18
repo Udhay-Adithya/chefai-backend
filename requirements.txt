@@ -2,3 +2,5 @@ fastapi
 uvicorn
 python-jose[cryptography]
 passlib[bcrypt]
+tqdm
+pandas
