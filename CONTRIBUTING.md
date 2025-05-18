@@ -8,8 +8,8 @@ Thank you for considering contributing! This guide will walk you through the ste
 
 ### 1. Fork the Repository
 
-* Click on the Fork button at the top-right corner of the repository page.
-* This creates a personal copy under your GitHub account.
+- Click on the Fork button at the top-right corner of the repository page.
+- This creates a personal copy under your GitHub account.
 
 ### 2. Clone Your Fork Locally
 
@@ -32,8 +32,8 @@ source venv/bin/activate  # On Windows use: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-
 ### 5. Add Dataset
+
 Place your original [RecipeNLG](https://www.kaggle.com/datasets/saldenisov/recipenlg/data) dataset file (recipes.csv) into the data/ folder
 RecipeNLG Dataset : https://www.kaggle.com/datasets/saldenisov/recipenlg/data
 
@@ -64,7 +64,7 @@ Visit: [http://localhost:8000/docs](http://localhost:8000/docs)
 1. Create a new branch
 
 ```bash
-git checkout -b feature/your-feature-name
+git checkout -b your-feature-name
 ```
 
 2. Make your changes, test thoroughly, then commit:
@@ -86,9 +86,9 @@ git push origin feature/your-feature-name
 
 ## 📌 Contribution Tips
 
-* Follow PEP8 and comment your code.
-* Keep commits atomic.
-* Test your changes before PR.
-* Use descriptive branch and commit names.
+- Follow PEP8 and comment your code.
+- Keep commits atomic.
+- Test your changes before PR.
+- Use descriptive branch and commit names.
 
 Thanks for contributing! ❤️
