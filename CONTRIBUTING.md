@@ -32,6 +32,11 @@ source venv/bin/activate  # On Windows use: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
+
+### 5. Add Dataset
+Place your original [RecipeNLG](https://www.kaggle.com/datasets/saldenisov/recipenlg/data) dataset file (recipes.csv) into the data/ folder
+RecipeNLG Dataset : https://www.kaggle.com/datasets/saldenisov/recipenlg/data
+
 ---
 
 ## 🧪 Testing Your Changes
