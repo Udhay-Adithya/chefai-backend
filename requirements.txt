@@ -4,3 +4,5 @@ python-jose[cryptography]
 passlib[bcrypt]
 tqdm
 pandas
+sentence_transformers
+numpy
