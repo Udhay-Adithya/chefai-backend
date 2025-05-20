@@ -1,4 +1,4 @@
---index-url https://download.pytorch.org/whl/cu126
+--extra-index-url https://download.pytorch.org/whl/cu126
 
 fastapi
 uvicorn
@@ -7,6 +7,7 @@ passlib[bcrypt]
 tqdm
 pandas
 ijson
+sentence-transformers
 torch
 torchvision
 torchaudio
