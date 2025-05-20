@@ -2,14 +2,14 @@ import pandas as pd
 import json
 import os
 from tqdm import tqdm
+import math
 
 INPUT_CSV = "data/recipes.csv"
-OUTPUT_JSON = "data/processed_recipes.json"
+OUTPUT_DIR = "data/processed_recipes"
 
 def clean_text_list(lst):
     if isinstance(lst, str):
         try:
-            # Convert stringified list to actual list
             lst = eval(lst)
         except:
             return []
@@ -30,30 +30,39 @@ def combine_fields(row):
 def preprocess():
     print("Loading dataset...")
     df = pd.read_csv(INPUT_CSV)
+    total_rows = len(df)
+    split_size = math.ceil(total_rows / 4)
 
-    print("Cleaning and combining fields...")
-    processed = []
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    for _, row in tqdm(df.iterrows(), total=len(df)):
-        try:
-            text = combine_fields(row)
-            doc = {
-                "id": int(_),
-                "title": row["title"],
-                "ingredients": clean_text_list(row["ingredients"]),
-                "directions": clean_text_list(row["directions"]),
-                "source": row.get("source", "Unknown"),
-                "text": text
-            }
-            processed.append(doc)
-        except Exception as e:
-            print(f"Error processing row {row.get('id', 'unknown')}: {e}")
+    print("Cleaning and splitting into 4 files...")
+    for i in range(4):
+        start = i * split_size
+        end = min(start + split_size, total_rows)
+        chunk = df.iloc[start:end]
 
-    print(f"Saving {len(processed)} processed recipes...")
-    os.makedirs("data", exist_ok=True)
-    with open(OUTPUT_JSON, "w", encoding="utf-8") as f:
-        json.dump(processed, f, indent=2, ensure_ascii=False)
+        processed = []
+        for idx, row in tqdm(chunk.iterrows(), total=len(chunk), desc=f"Processing chunk {i+1}"):
+            try:
+                text = combine_fields(row)
+                doc = {
+                    "id": int(start + idx),
+                    "title": row["title"],
+                    "ingredients": clean_text_list(row["ingredients"]),
+                    "directions": clean_text_list(row["directions"]),
+                    "source": row.get("source", "Unknown"),
+                    "text": text
+                }
+                processed.append(doc)
+            except Exception as e:
+                print(f"Error processing row {row.get('id', 'unknown')}: {e}")
 
-    print("Preprocessing complete.")
+        output_path = os.path.join(OUTPUT_DIR, f"recipes_part_{i+1}.json")
+        with open(output_path, "w", encoding="utf-8") as f:
+            json.dump(processed, f, indent=2, ensure_ascii=False)
+
+        print(f"Saved {len(processed)} recipes to {output_path}")
+
+    print("Preprocessing and splitting complete.")
 
 preprocess()
