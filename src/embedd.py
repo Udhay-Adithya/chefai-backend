@@ -51,13 +51,13 @@ def convert_text_to_embeddings():
                 texts.append(prompt + obj["text"])
 
                 if len(texts) == BATCH_SIZE:
-                    emb = model.encode_multi_process(texts, pool_size=os.cpu_count(), normalize_embeddings=True, show_progress_bar=False)
+                    emb = model.encode(texts, batch_size=8, normalize_embeddings=True, show_progress_bar=False)
                     np.save(os.path.join(OUTPUT_DIR, f"chunk_{chunk_idx}.npy"), emb)
                     texts = []
                     chunk_idx += 1
 
     if texts:  # Final incomplete batch
-        emb = model.encode_multi_process(texts, pool_size=os.cpu_count(), normalize_embeddings=True, show_progress_bar=False)
+        emb = model.encode(texts, batch_size=8, normalize_embeddings=True, show_progress_bar=False)
         np.save(os.path.join(OUTPUT_DIR, f"chunk_{chunk_idx}.npy"), emb)
 
     print(f"Saved up to chunk {chunk_idx} in {OUTPUT_DIR}")
