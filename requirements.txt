@@ -11,3 +11,4 @@ sentence-transformers
 torch
 torchvision
 torchaudio
+psycopg2
