@@ -132,5 +132,5 @@ dmypy.json
 .pyre/
 
 
-# data file
-data/
+# local dataset files
+/data/

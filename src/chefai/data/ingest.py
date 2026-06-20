@@ -228,8 +228,14 @@ def _infer_equipment(direction_text: str) -> list[str]:
 
 
 def _infer_cook_time(direction_text: str) -> int | None:
-    minutes = [int(value) for value in re.findall(r"(\d+)\s*(?:minute|minutes|min)\b", direction_text)]
-    hours = [int(value) * 60 for value in re.findall(r"(\d+)\s*(?:hour|hours|hr|hrs)\b", direction_text)]
+    minutes = [
+        int(value)
+        for value in re.findall(r"(\d+)\s*(?:minute|minutes|min)\b", direction_text)
+    ]
+    hours = [
+        int(value) * 60
+        for value in re.findall(r"(\d+)\s*(?:hour|hours|hr|hrs)\b", direction_text)
+    ]
     values = minutes + hours
     if not values:
         return None
