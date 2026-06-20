@@ -1,7 +1,7 @@
 {
   "type": "excalidraw",
   "version": 2,
-  "source": "https://excalidraw.com",
+  "source": "https://marketplace.visualstudio.com/items?itemName=pomdtr.excalidraw-editor",
   "elements": [
     {
       "id": "title-ingestion",
@@ -22,11 +22,11 @@
       "frameId": null,
       "roundness": null,
       "seed": 3001,
-      "version": 1,
-      "versionNonce": 3001,
+      "version": 2,
+      "versionNonce": 1619761762,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1781948118152,
       "link": null,
       "locked": false,
       "text": "ingestion and indexing flow",
@@ -37,7 +37,8 @@
       "containerId": null,
       "originalText": "ingestion and indexing flow",
       "autoResize": true,
-      "lineHeight": 1.25
+      "lineHeight": 1.25,
+      "index": "a0"
     },
     {
       "id": "csv-box",
@@ -60,21 +61,22 @@
         "type": 3
       },
       "seed": 3002,
-      "version": 1,
-      "versionNonce": 3002,
+      "version": 2,
+      "versionNonce": 1935357118,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1781948118152,
       "link": null,
-      "locked": false
+      "locked": false,
+      "index": "a1"
     },
     {
       "id": "csv-text",
       "type": "text",
-      "x": 93,
+      "x": 69.28807067871094,
       "y": 153,
-      "width": 134,
-      "height": 63,
+      "width": 181.42385864257812,
+      "height": 80,
       "angle": 0,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "transparent",
@@ -87,11 +89,11 @@
       "frameId": null,
       "roundness": null,
       "seed": 3003,
-      "version": 1,
-      "versionNonce": 3003,
+      "version": 3,
+      "versionNonce": 70363582,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1781948127437,
       "link": null,
       "locked": false,
       "text": "data/full_dataset.csv\n\ntitle, ner,\ndirections, source",
@@ -102,7 +104,8 @@
       "containerId": null,
       "originalText": "data/full_dataset.csv\n\ntitle, ner,\ndirections, source",
       "autoResize": true,
-      "lineHeight": 1.25
+      "lineHeight": 1.25,
+      "index": "a2"
     },
     {
       "id": "parse-box",
@@ -125,21 +128,22 @@
         "type": 3
       },
       "seed": 3004,
-      "version": 1,
-      "versionNonce": 3004,
+      "version": 2,
+      "versionNonce": 1574038782,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1781948118152,
       "link": null,
-      "locked": false
+      "locked": false,
+      "index": "a3"
     },
     {
       "id": "parse-text",
       "type": "text",
-      "x": 388,
-      "y": 153,
-      "width": 144,
-      "height": 63,
+      "x": 395.54002380371094,
+      "y": 152.61309814453125,
+      "width": 129.66390991210938,
+      "height": 80,
       "angle": 0,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "transparent",
@@ -152,11 +156,11 @@
       "frameId": null,
       "roundness": null,
       "seed": 3005,
-      "version": 1,
-      "versionNonce": 3005,
+      "version": 4,
+      "versionNonce": 357003326,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1781948119231,
       "link": null,
       "locked": false,
       "text": "parse row\n\nclean list fields\nbuild recipe text",
@@ -167,7 +171,8 @@
       "containerId": null,
       "originalText": "parse row\n\nclean list fields\nbuild recipe text",
       "autoResize": true,
-      "lineHeight": 1.25
+      "lineHeight": 1.25,
+      "index": "a4"
     },
     {
       "id": "metadata-box",
@@ -190,13 +195,14 @@
         "type": 3
       },
       "seed": 3006,
-      "version": 1,
-      "versionNonce": 3006,
+      "version": 2,
+      "versionNonce": 1900518718,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1781948118152,
       "link": null,
-      "locked": false
+      "locked": false,
+      "index": "a5"
     },
     {
       "id": "metadata-text",
@@ -217,11 +223,11 @@
       "frameId": null,
       "roundness": null,
       "seed": 3007,
-      "version": 1,
-      "versionNonce": 3007,
+      "version": 2,
+      "versionNonce": 1585077666,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1781948118152,
       "link": null,
       "locked": false,
       "text": "infer metadata\n\ndiet tags, allergens\nequipment, cook time\ncost level",
@@ -232,7 +238,8 @@
       "containerId": null,
       "originalText": "infer metadata\n\ndiet tags, allergens\nequipment, cook time\ncost level",
       "autoResize": true,
-      "lineHeight": 1.25
+      "lineHeight": 1.25,
+      "index": "a6"
     },
     {
       "id": "document-box",
@@ -255,21 +262,22 @@
         "type": 3
       },
       "seed": 3008,
-      "version": 1,
-      "versionNonce": 3008,
+      "version": 2,
+      "versionNonce": 589120894,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1781948118152,
       "link": null,
-      "locked": false
+      "locked": false,
+      "index": "a7"
     },
     {
       "id": "document-text",
       "type": "text",
-      "x": 1032,
+      "x": 1038.8560333251953,
       "y": 153,
-      "width": 136,
-      "height": 63,
+      "width": 122.28793334960938,
+      "height": 80,
       "angle": 0,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "transparent",
@@ -282,11 +290,11 @@
       "frameId": null,
       "roundness": null,
       "seed": 3009,
-      "version": 1,
-      "versionNonce": 3009,
+      "version": 3,
+      "versionNonce": 658519102,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1781948130649,
       "link": null,
       "locked": false,
       "text": "recipe document\n\npydantic model\nqdrant payload",
@@ -297,7 +305,8 @@
       "containerId": null,
       "originalText": "recipe document\n\npydantic model\nqdrant payload",
       "autoResize": true,
-      "lineHeight": 1.25
+      "lineHeight": 1.25,
+      "index": "a8"
     },
     {
       "id": "batch-box",
@@ -320,21 +329,22 @@
         "type": 3
       },
       "seed": 3010,
-      "version": 1,
-      "versionNonce": 3010,
+      "version": 2,
+      "versionNonce": 345236926,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1781948118152,
       "link": null,
-      "locked": false
+      "locked": false,
+      "index": "a9"
     },
     {
       "id": "batch-text",
       "type": "text",
-      "x": 394,
+      "x": 394.52803802490234,
       "y": 383,
-      "width": 132,
-      "height": 63,
+      "width": 130.9439239501953,
+      "height": 80,
       "angle": 0,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "transparent",
@@ -347,11 +357,11 @@
       "frameId": null,
       "roundness": null,
       "seed": 3011,
-      "version": 1,
-      "versionNonce": 3011,
+      "version": 3,
+      "versionNonce": 1549203618,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1781948128328,
       "link": null,
       "locked": false,
       "text": "batch documents\n\nconfigurable size\ndefault 128",
@@ -362,7 +372,8 @@
       "containerId": null,
       "originalText": "batch documents\n\nconfigurable size\ndefault 128",
       "autoResize": true,
-      "lineHeight": 1.25
+      "lineHeight": 1.25,
+      "index": "aA"
     },
     {
       "id": "embed-box",
@@ -385,21 +396,22 @@
         "type": 3
       },
       "seed": 3012,
-      "version": 1,
-      "versionNonce": 3012,
+      "version": 2,
+      "versionNonce": 382500350,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1781948118152,
       "link": null,
-      "locked": false
+      "locked": false,
+      "index": "aB"
     },
     {
       "id": "embed-text",
       "type": "text",
-      "x": 704,
+      "x": 713.0320434570312,
       "y": 383,
-      "width": 152,
-      "height": 63,
+      "width": 133.9359130859375,
+      "height": 80,
       "angle": 0,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "transparent",
@@ -412,11 +424,11 @@
       "frameId": null,
       "roundness": null,
       "seed": 3013,
-      "version": 1,
-      "versionNonce": 3013,
+      "version": 3,
+      "versionNonce": 704238334,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1781948129216,
       "link": null,
       "locked": false,
       "text": "embedding service\n\ndense vector\nsparse vector",
@@ -427,7 +439,8 @@
       "containerId": null,
       "originalText": "embedding service\n\ndense vector\nsparse vector",
       "autoResize": true,
-      "lineHeight": 1.25
+      "lineHeight": 1.25,
+      "index": "aC"
     },
     {
       "id": "upsert-box",
@@ -450,21 +463,22 @@
         "type": 3
       },
       "seed": 3014,
-      "version": 1,
-      "versionNonce": 3014,
+      "version": 2,
+      "versionNonce": 784862782,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1781948118152,
       "link": null,
-      "locked": false
+      "locked": false,
+      "index": "aD"
     },
     {
       "id": "upsert-text",
       "type": "text",
-      "x": 1028,
+      "x": 1043.6240310668945,
       "y": 383,
-      "width": 144,
-      "height": 63,
+      "width": 112.75193786621094,
+      "height": 80,
       "angle": 0,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "transparent",
@@ -477,11 +491,11 @@
       "frameId": null,
       "roundness": null,
       "seed": 3015,
-      "version": 1,
-      "versionNonce": 3015,
+      "version": 3,
+      "versionNonce": 1560105826,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1781948129866,
       "link": null,
       "locked": false,
       "text": "qdrant upsert\n\nid, payload,\nnamed vectors",
@@ -492,7 +506,8 @@
       "containerId": null,
       "originalText": "qdrant upsert\n\nid, payload,\nnamed vectors",
       "autoResize": true,
-      "lineHeight": 1.25
+      "lineHeight": 1.25,
+      "index": "aE"
     },
     {
       "id": "arrow-csv-parse",
@@ -515,11 +530,11 @@
         "type": 2
       },
       "seed": 3016,
-      "version": 1,
-      "versionNonce": 3016,
+      "version": 2,
+      "versionNonce": 426219134,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1781948118152,
       "link": null,
       "locked": false,
       "points": [
@@ -536,7 +551,8 @@
       "startBinding": null,
       "endBinding": null,
       "startArrowhead": null,
-      "endArrowhead": "arrow"
+      "endArrowhead": "arrow",
+      "index": "aF"
     },
     {
       "id": "arrow-parse-metadata",
@@ -559,11 +575,11 @@
         "type": 2
       },
       "seed": 3017,
-      "version": 1,
-      "versionNonce": 3017,
+      "version": 2,
+      "versionNonce": 1130469474,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1781948118152,
       "link": null,
       "locked": false,
       "points": [
@@ -580,7 +596,8 @@
       "startBinding": null,
       "endBinding": null,
       "startArrowhead": null,
-      "endArrowhead": "arrow"
+      "endArrowhead": "arrow",
+      "index": "aG"
     },
     {
       "id": "arrow-metadata-document",
@@ -603,11 +620,11 @@
         "type": 2
       },
       "seed": 3018,
-      "version": 1,
-      "versionNonce": 3018,
+      "version": 2,
+      "versionNonce": 1332483774,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1781948118152,
       "link": null,
       "locked": false,
       "points": [
@@ -624,14 +641,15 @@
       "startBinding": null,
       "endBinding": null,
       "startArrowhead": null,
-      "endArrowhead": "arrow"
+      "endArrowhead": "arrow",
+      "index": "aH"
     },
     {
       "id": "arrow-document-batch",
       "type": "arrow",
       "x": 1100,
       "y": 235,
-      "width": -640,
+      "width": 640,
       "height": 177,
       "angle": 0,
       "strokeColor": "#1e1e1e",
@@ -647,11 +665,11 @@
         "type": 2
       },
       "seed": 3019,
-      "version": 1,
-      "versionNonce": 3019,
+      "version": 2,
+      "versionNonce": 1041513506,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1781948118152,
       "link": null,
       "locked": false,
       "points": [
@@ -668,7 +686,8 @@
       "startBinding": null,
       "endBinding": null,
       "startArrowhead": null,
-      "endArrowhead": "arrow"
+      "endArrowhead": "arrow",
+      "index": "aI"
     },
     {
       "id": "arrow-batch-embed",
@@ -691,11 +710,11 @@
         "type": 2
       },
       "seed": 3020,
-      "version": 1,
-      "versionNonce": 3020,
+      "version": 2,
+      "versionNonce": 158764798,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1781948118152,
       "link": null,
       "locked": false,
       "points": [
@@ -712,7 +731,8 @@
       "startBinding": null,
       "endBinding": null,
       "startArrowhead": null,
-      "endArrowhead": "arrow"
+      "endArrowhead": "arrow",
+      "index": "aJ"
     },
     {
       "id": "arrow-embed-upsert",
@@ -735,11 +755,11 @@
         "type": 2
       },
       "seed": 3021,
-      "version": 1,
-      "versionNonce": 3021,
+      "version": 2,
+      "versionNonce": 1513908194,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1781948118152,
       "link": null,
       "locked": false,
       "points": [
@@ -756,11 +776,14 @@
       "startBinding": null,
       "endBinding": null,
       "startArrowhead": null,
-      "endArrowhead": "arrow"
+      "endArrowhead": "arrow",
+      "index": "aK"
     }
   ],
   "appState": {
-    "gridSize": null,
+    "gridSize": 20,
+    "gridStep": 5,
+    "gridModeEnabled": false,
     "viewBackgroundColor": "#ffffff"
   },
   "files": {}
