@@ -1,0 +1,57 @@
+[project]
+name = "chefai-backend"
+version = "0.1.0"
+description = "Recipe recommendation backend using Qdrant hybrid search and reranking."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.30.0",
+    "pydantic>=2.8.0",
+    "pydantic-settings>=2.4.0",
+    "qdrant-client[fastembed]>=1.11.0",
+    "fastembed>=0.3.6",
+    "orjson>=3.10.0",
+    "pandas>=2.2.0",
+    "python-dotenv>=1.0.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "httpx>=0.27.0",
+    "pytest>=8.3.0",
+    "ruff>=0.6.0",
+]
+
+[project.scripts]
+chefai-ingest = "chefai.data.ingest:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/chefai"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = [
+    "src/config.py",
+    "src/db.py",
+    "src/ed.py",
+    "src/embedd.py",
+    "src/main.py",
+    "src/model.py",
+    "src/preprocess.py",
+    "src/python_to_sql.py",
+    "src/search.py",
+    "src/test.py",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
