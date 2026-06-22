@@ -1,0 +1,198 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    {
+      "id": "title",
+      "type": "text",
+      "x": 400,
+      "y": 30,
+      "width": 500,
+      "height": 50,
+      "text": "AI Recipe Assistant App - User Flow",
+      "fontSize": 32,
+      "fontFamily": 1,
+      "textAlign": "center"
+    },
+    {
+      "id": "start",
+      "type": "rectangle",
+      "x": 450,
+      "y": 120,
+      "width": 300,
+      "height": 80,
+      "backgroundColor": "#e3f2fd",
+      "strokeColor": "#1976d2"
+    },
+    {
+      "id": "start-text",
+      "type": "text",
+      "x": 520,
+      "y": 145,
+      "text": "User Opens App",
+      "fontSize": 20
+    },
+    {
+      "id": "arrow1",
+      "type": "arrow",
+      "x": 600,
+      "y": 200,
+      "width": 0,
+      "height": 60,
+      "points": [[0,0], [0,60]]
+    },
+    {
+      "id": "input",
+      "type": "rectangle",
+      "x": 350,
+      "y": 300,
+      "width": 500,
+      "height": 100,
+      "backgroundColor": "#f3e5f5"
+    },
+    {
+      "id": "input-text",
+      "type": "text",
+      "x": 400,
+      "y": 320,
+      "text": "Input Ingredients\n(Text / Voice / Image)",
+      "fontSize": 18
+    },
+    {
+      "id": "arrow2",
+      "type": "arrow",
+      "x": 600,
+      "y": 400,
+      "width": 0,
+      "height": 60
+    },
+    {
+      "id": "processing",
+      "type": "rectangle",
+      "x": 200,
+      "y": 500,
+      "width": 200,
+      "height": 120,
+      "backgroundColor": "#e8f5e9"
+    },
+    {
+      "id": "processing-text",
+      "type": "text",
+      "x": 230,
+      "y": 520,
+      "text": "Backend Processing\n• Whisper (Voice)\n• GPT-4o Vision (Image)\n• LangGraph Agent",
+      "fontSize": 16
+    },
+    {
+      "id": "search",
+      "type": "rectangle",
+      "x": 450,
+      "y": 500,
+      "width": 200,
+      "height": 120,
+      "backgroundColor": "#fff3e0"
+    },
+    {
+      "id": "search-text",
+      "type": "text",
+      "x": 470,
+      "y": 520,
+      "text": "Semantic Search\nQdrant + LlamaIndex",
+      "fontSize": 18
+    },
+    {
+      "id": "llm",
+      "type": "rectangle",
+      "x": 700,
+      "y": 500,
+      "width": 200,
+      "height": 120,
+      "backgroundColor": "#fce4ec"
+    },
+    {
+      "id": "llm-text",
+      "type": "text",
+      "x": 720,
+      "y": 520,
+      "text": "LLM Generation\n(GPT-4o / Gemini)\n+ YouTube API",
+      "fontSize": 17
+    },
+    {
+      "id": "arrow3",
+      "type": "arrow",
+      "x": 600,
+      "y": 620,
+      "width": 0,
+      "height": 60
+    },
+    {
+      "id": "recipe",
+      "type": "rectangle",
+      "x": 450,
+      "y": 720,
+      "width": 300,
+      "height": 90,
+      "backgroundColor": "#e0f2f1"
+    },
+    {
+      "id": "recipe-text",
+      "type": "text",
+      "x": 500,
+      "y": 740,
+      "text": "Recipe Displayed\n(with timed steps)",
+      "fontSize": 20
+    },
+    {
+      "id": "arrow4",
+      "type": "arrow",
+      "x": 600,
+      "y": 810,
+      "width": 0,
+      "height": 60
+    },
+    {
+      "id": "cooking",
+      "type": "rectangle",
+      "x": 400,
+      "y": 910,
+      "width": 400,
+      "height": 110,
+      "backgroundColor": "#fff8e1"
+    },
+    {
+      "id": "cooking-text",
+      "type": "text",
+      "x": 460,
+      "y": 930,
+      "text": "Cooking Mode\n• Step-by-step with Timers\n• YouTube Video\n• Ask doubts (Voice/Text)",
+      "fontSize": 18
+    },
+    {
+      "id": "arrow5",
+      "type": "arrow",
+      "x": 600,
+      "y": 1020,
+      "width": 0,
+      "height": 50
+    },
+    {
+      "id": "end",
+      "type": "rectangle",
+      "x": 480,
+      "y": 1110,
+      "width": 240,
+      "height": 80,
+      "backgroundColor": "#c8e6c9"
+    },
+    {
+      "id": "end-text",
+      "type": "text",
+      "x": 530,
+      "y": 1135,
+      "text": "Finish / Save Recipe",
+      "fontSize": 20
+    }
+  ],
+  "files": {}
+}

@@ -107,19 +107,43 @@ def ingest_recipes(path: Path, batch_size: int = 128, limit: int | None = None) 
     repository.ensure_collection()
 
     logger.info("Reading recipes from %s", path)
+    
+    checkpoint_path = path.parent / f"{path.stem}_checkpoint.txt"
+    start_index = 0
+    if checkpoint_path.exists():
+        try:
+            start_index = int(checkpoint_path.read_text().strip())
+            logger.info("Found checkpoint. Resuming from row index %d", start_index)
+        except Exception as e:
+            logger.warning("Could not read checkpoint file: %s. Starting from scratch.", e)
+
     dataframe = pd.read_csv(path)
     if limit:
         dataframe = dataframe.head(limit)
 
+    if start_index > 0:
+        dataframe = dataframe.iloc[start_index:]
+
     batch: list[RecipeDocument] = []
+    processed_count = start_index
     for index, row in dataframe.iterrows():
         batch.append(recipe_from_row(index, row))
         if len(batch) >= batch_size:
             _upsert_batch(repository, embedding_service, batch)
+            processed_count += len(batch)
+            try:
+                checkpoint_path.write_text(str(processed_count))
+            except Exception as e:
+                logger.warning("Failed to save checkpoint: %s", e)
             batch = []
 
     if batch:
         _upsert_batch(repository, embedding_service, batch)
+        processed_count += len(batch)
+        try:
+            checkpoint_path.write_text(str(processed_count))
+        except Exception as e:
+            logger.warning("Failed to save checkpoint: %s", e)
 
 
 def recipe_from_row(index: int, row: pd.Series) -> RecipeDocument:

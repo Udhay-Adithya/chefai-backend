@@ -1,5 +1,5 @@
 
-from src.db import get_connection
+from db import get_connection
 from psycopg2.extras import RealDictCursor
 
 def search_recipes(embedding_vector, top_k=5):

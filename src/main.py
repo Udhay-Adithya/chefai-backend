@@ -1,8 +1,8 @@
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from src.model import load_model
-from src.search import search_recipes
+from model import load_model
+from search import search_recipes
 
 
 app = FastAPI()

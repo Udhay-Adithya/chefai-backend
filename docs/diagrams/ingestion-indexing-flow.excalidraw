@@ -1,7 +1,7 @@
 {
   "type": "excalidraw",
   "version": 2,
-  "source": "https://excalidraw.com",
+  "source": "https://marketplace.visualstudio.com/items?itemName=pomdtr.excalidraw-editor",
   "elements": [
     {
       "id": "title-ingestion",
@@ -22,11 +22,11 @@
       "frameId": null,
       "roundness": null,
       "seed": 3001,
-      "version": 1,
-      "versionNonce": 3001,
+      "version": 2,
+      "versionNonce": 1920016547,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1782020639927,
       "link": null,
       "locked": false,
       "text": "ingestion and indexing flow",
@@ -37,7 +37,8 @@
       "containerId": null,
       "originalText": "ingestion and indexing flow",
       "autoResize": true,
-      "lineHeight": 1.25
+      "lineHeight": 1.25,
+      "index": "a0"
     },
     {
       "id": "csv-box",
@@ -60,19 +61,20 @@
         "type": 3
       },
       "seed": 3002,
-      "version": 1,
-      "versionNonce": 3002,
+      "version": 2,
+      "versionNonce": 19459853,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1782020639927,
       "link": null,
-      "locked": false
+      "locked": false,
+      "index": "a1"
     },
     {
       "id": "csv-text",
       "type": "text",
-      "x": 93,
-      "y": 153,
+      "x": 94.33331298828125,
+      "y": 154,
       "width": 134,
       "height": 63,
       "angle": 0,
@@ -87,11 +89,11 @@
       "frameId": null,
       "roundness": null,
       "seed": 3003,
-      "version": 1,
-      "versionNonce": 3003,
+      "version": 21,
+      "versionNonce": 1975348483,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1782020651598,
       "link": null,
       "locked": false,
       "text": "data/full_dataset.csv\n\ntitle, ner,\ndirections, source",
@@ -102,7 +104,8 @@
       "containerId": null,
       "originalText": "data/full_dataset.csv\n\ntitle, ner,\ndirections, source",
       "autoResize": true,
-      "lineHeight": 1.25
+      "lineHeight": 1.25,
+      "index": "a2"
     },
     {
       "id": "parse-box",
@@ -125,13 +128,14 @@
         "type": 3
       },
       "seed": 3004,
-      "version": 1,
-      "versionNonce": 3004,
+      "version": 2,
+      "versionNonce": 2041677165,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1782020639927,
       "link": null,
-      "locked": false
+      "locked": false,
+      "index": "a3"
     },
     {
       "id": "parse-text",
@@ -152,11 +156,11 @@
       "frameId": null,
       "roundness": null,
       "seed": 3005,
-      "version": 1,
-      "versionNonce": 3005,
+      "version": 2,
+      "versionNonce": 1478857699,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1782020639927,
       "link": null,
       "locked": false,
       "text": "parse row\n\nclean list fields\nbuild recipe text",
@@ -167,7 +171,8 @@
       "containerId": null,
       "originalText": "parse row\n\nclean list fields\nbuild recipe text",
       "autoResize": true,
-      "lineHeight": 1.25
+      "lineHeight": 1.25,
+      "index": "a4"
     },
     {
       "id": "metadata-box",
@@ -190,13 +195,14 @@
         "type": 3
       },
       "seed": 3006,
-      "version": 1,
-      "versionNonce": 3006,
+      "version": 2,
+      "versionNonce": 1436045261,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1782020639927,
       "link": null,
-      "locked": false
+      "locked": false,
+      "index": "a5"
     },
     {
       "id": "metadata-text",
@@ -217,11 +223,11 @@
       "frameId": null,
       "roundness": null,
       "seed": 3007,
-      "version": 1,
-      "versionNonce": 3007,
+      "version": 2,
+      "versionNonce": 716119939,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1782020639927,
       "link": null,
       "locked": false,
       "text": "infer metadata\n\ndiet tags, allergens\nequipment, cook time\ncost level",
@@ -232,7 +238,8 @@
       "containerId": null,
       "originalText": "infer metadata\n\ndiet tags, allergens\nequipment, cook time\ncost level",
       "autoResize": true,
-      "lineHeight": 1.25
+      "lineHeight": 1.25,
+      "index": "a6"
     },
     {
       "id": "document-box",
@@ -255,13 +262,14 @@
         "type": 3
       },
       "seed": 3008,
-      "version": 1,
-      "versionNonce": 3008,
+      "version": 2,
+      "versionNonce": 1928777261,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1782020639927,
       "link": null,
-      "locked": false
+      "locked": false,
+      "index": "a7"
     },
     {
       "id": "document-text",
@@ -282,11 +290,11 @@
       "frameId": null,
       "roundness": null,
       "seed": 3009,
-      "version": 1,
-      "versionNonce": 3009,
+      "version": 2,
+      "versionNonce": 2001090339,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1782020639927,
       "link": null,
       "locked": false,
       "text": "recipe document\n\npydantic model\nqdrant payload",
@@ -297,7 +305,8 @@
       "containerId": null,
       "originalText": "recipe document\n\npydantic model\nqdrant payload",
       "autoResize": true,
-      "lineHeight": 1.25
+      "lineHeight": 1.25,
+      "index": "a8"
     },
     {
       "id": "batch-box",
@@ -320,13 +329,14 @@
         "type": 3
       },
       "seed": 3010,
-      "version": 1,
-      "versionNonce": 3010,
+      "version": 2,
+      "versionNonce": 817266829,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1782020639927,
       "link": null,
-      "locked": false
+      "locked": false,
+      "index": "a9"
     },
     {
       "id": "batch-text",
@@ -347,11 +357,11 @@
       "frameId": null,
       "roundness": null,
       "seed": 3011,
-      "version": 1,
-      "versionNonce": 3011,
+      "version": 2,
+      "versionNonce": 1012488899,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1782020639927,
       "link": null,
       "locked": false,
       "text": "batch documents\n\nconfigurable size\ndefault 128",
@@ -362,7 +372,8 @@
       "containerId": null,
       "originalText": "batch documents\n\nconfigurable size\ndefault 128",
       "autoResize": true,
-      "lineHeight": 1.25
+      "lineHeight": 1.25,
+      "index": "aA"
     },
     {
       "id": "embed-box",
@@ -385,13 +396,14 @@
         "type": 3
       },
       "seed": 3012,
-      "version": 1,
-      "versionNonce": 3012,
+      "version": 2,
+      "versionNonce": 1418782445,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1782020639927,
       "link": null,
-      "locked": false
+      "locked": false,
+      "index": "aB"
     },
     {
       "id": "embed-text",
@@ -412,11 +424,11 @@
       "frameId": null,
       "roundness": null,
       "seed": 3013,
-      "version": 1,
-      "versionNonce": 3013,
+      "version": 2,
+      "versionNonce": 646384227,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1782020639927,
       "link": null,
       "locked": false,
       "text": "embedding service\n\ndense vector\nsparse vector",
@@ -427,7 +439,8 @@
       "containerId": null,
       "originalText": "embedding service\n\ndense vector\nsparse vector",
       "autoResize": true,
-      "lineHeight": 1.25
+      "lineHeight": 1.25,
+      "index": "aC"
     },
     {
       "id": "upsert-box",
@@ -450,13 +463,14 @@
         "type": 3
       },
       "seed": 3014,
-      "version": 1,
-      "versionNonce": 3014,
+      "version": 2,
+      "versionNonce": 823099725,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1782020639927,
       "link": null,
-      "locked": false
+      "locked": false,
+      "index": "aD"
     },
     {
       "id": "upsert-text",
@@ -477,11 +491,11 @@
       "frameId": null,
       "roundness": null,
       "seed": 3015,
-      "version": 1,
-      "versionNonce": 3015,
+      "version": 2,
+      "versionNonce": 1251853827,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1782020639927,
       "link": null,
       "locked": false,
       "text": "qdrant upsert\n\nid, payload,\nnamed vectors",
@@ -492,7 +506,8 @@
       "containerId": null,
       "originalText": "qdrant upsert\n\nid, payload,\nnamed vectors",
       "autoResize": true,
-      "lineHeight": 1.25
+      "lineHeight": 1.25,
+      "index": "aE"
     },
     {
       "id": "arrow-csv-parse",
@@ -515,11 +530,11 @@
         "type": 2
       },
       "seed": 3016,
-      "version": 1,
-      "versionNonce": 3016,
+      "version": 2,
+      "versionNonce": 193712045,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1782020639927,
       "link": null,
       "locked": false,
       "points": [
@@ -536,7 +551,8 @@
       "startBinding": null,
       "endBinding": null,
       "startArrowhead": null,
-      "endArrowhead": "arrow"
+      "endArrowhead": "arrow",
+      "index": "aF"
     },
     {
       "id": "arrow-parse-metadata",
@@ -559,11 +575,11 @@
         "type": 2
       },
       "seed": 3017,
-      "version": 1,
-      "versionNonce": 3017,
+      "version": 2,
+      "versionNonce": 530320803,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1782020639927,
       "link": null,
       "locked": false,
       "points": [
@@ -580,7 +596,8 @@
       "startBinding": null,
       "endBinding": null,
       "startArrowhead": null,
-      "endArrowhead": "arrow"
+      "endArrowhead": "arrow",
+      "index": "aG"
     },
     {
       "id": "arrow-metadata-document",
@@ -603,11 +620,11 @@
         "type": 2
       },
       "seed": 3018,
-      "version": 1,
-      "versionNonce": 3018,
+      "version": 2,
+      "versionNonce": 1110397453,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1782020639927,
       "link": null,
       "locked": false,
       "points": [
@@ -624,14 +641,15 @@
       "startBinding": null,
       "endBinding": null,
       "startArrowhead": null,
-      "endArrowhead": "arrow"
+      "endArrowhead": "arrow",
+      "index": "aH"
     },
     {
       "id": "arrow-document-batch",
       "type": "arrow",
       "x": 1100,
       "y": 235,
-      "width": -640,
+      "width": 640,
       "height": 177,
       "angle": 0,
       "strokeColor": "#1e1e1e",
@@ -647,11 +665,11 @@
         "type": 2
       },
       "seed": 3019,
-      "version": 1,
-      "versionNonce": 3019,
+      "version": 2,
+      "versionNonce": 951083331,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1782020639927,
       "link": null,
       "locked": false,
       "points": [
@@ -668,7 +686,8 @@
       "startBinding": null,
       "endBinding": null,
       "startArrowhead": null,
-      "endArrowhead": "arrow"
+      "endArrowhead": "arrow",
+      "index": "aI"
     },
     {
       "id": "arrow-batch-embed",
@@ -691,11 +710,11 @@
         "type": 2
       },
       "seed": 3020,
-      "version": 1,
-      "versionNonce": 3020,
+      "version": 2,
+      "versionNonce": 838043757,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1782020639927,
       "link": null,
       "locked": false,
       "points": [
@@ -712,7 +731,8 @@
       "startBinding": null,
       "endBinding": null,
       "startArrowhead": null,
-      "endArrowhead": "arrow"
+      "endArrowhead": "arrow",
+      "index": "aJ"
     },
     {
       "id": "arrow-embed-upsert",
@@ -735,11 +755,11 @@
         "type": 2
       },
       "seed": 3021,
-      "version": 1,
-      "versionNonce": 3021,
+      "version": 2,
+      "versionNonce": 1060716771,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1,
+      "boundElements": [],
+      "updated": 1782020639927,
       "link": null,
       "locked": false,
       "points": [
@@ -756,11 +776,14 @@
       "startBinding": null,
       "endBinding": null,
       "startArrowhead": null,
-      "endArrowhead": "arrow"
+      "endArrowhead": "arrow",
+      "index": "aK"
     }
   ],
   "appState": {
-    "gridSize": null,
+    "gridSize": 20,
+    "gridStep": 5,
+    "gridModeEnabled": false,
     "viewBackgroundColor": "#ffffff"
   },
   "files": {}
