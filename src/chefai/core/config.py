@@ -23,6 +23,13 @@ class Settings(BaseSettings):
     default_limit: int = 10
     max_limit: int = 50
 
+    db_name: str = "cookai"
+    db_user: str = "postgres"
+    db_password: str = "root"
+    db_host: str = "localhost"
+    db_port: int = 5432
+
+
 
 @lru_cache
 def get_settings() -> Settings:

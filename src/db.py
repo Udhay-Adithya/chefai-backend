@@ -1,11 +1,13 @@
 import psycopg2
-import config
+from chefai.core.config import get_settings
 
 def get_connection():
+    settings = get_settings()
     return psycopg2.connect(
-        dbname=config.DB_NAME,
-        user=config.DB_USER,
-        password=config.DB_PASSWORD,
-        host=config.DB_HOST,
-        port=config.DB_PORT
+        dbname=settings.db_name,
+        user=settings.db_user,
+        password=settings.db_password,
+        host=settings.db_host,
+        port=settings.db_port
     )
+
