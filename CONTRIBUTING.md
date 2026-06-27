@@ -1,94 +1,74 @@
-# 🤝 Contributing to Chef.ai
+# Contributing to ChefAI Backend
 
-Thank you for considering contributing! This guide will walk you through the steps to contribute effectively to this project.
+Thank you for contributing. Keep changes focused, tested, and aligned with the current FastAPI,
+Qdrant, and uv-based project structure.
 
----
+## Setup
 
-## 🛠️ Setup Instructions
-
-### 1. Fork the Repository
-
-- Click on the Fork button at the top-right corner of the repository page.
-- This creates a personal copy under your GitHub account.
-
-### 2. Clone Your Fork Locally
+Fork and clone the repository:
 
 ```bash
 git clone https://github.com/your-username/chefai-backend.git
 cd chefai-backend
 ```
 
-### 3. Add Upstream Remote
+Install dependencies:
 
 ```bash
-git remote add upstream https://github.com/Udhay-Adithya/chefai-backend.git
+uv sync --extra dev
 ```
 
-### 4. Set Up Environment
+Start Qdrant:
 
 ```bash
-python -m venv venv
-source venv/bin/activate  # On Windows use: venv\Scripts\activate
-pip install -r requirements.txt
+docker compose up -d qdrant
 ```
 
-### 5. Add Dataset
+## Dataset
 
-Place your original [RecipeNLG](https://www.kaggle.com/datasets/saldenisov/recipenlg/data) dataset file (recipes.csv) into the data/ folder
-RecipeNLG Dataset : https://www.kaggle.com/datasets/saldenisov/recipenlg/data
+Place the recipe CSV at:
 
----
+```text
+data/full_dataset.csv
+```
 
-## 🧪 Testing Your Changes
-
-You can run individual scripts:
+Ingest a small sample while developing:
 
 ```bash
-python src/preprocess.py
-python src/embed.py
-python src/search.py --query "tomato, garlic"
+uv run chefai-ingest --input data/full_dataset.csv --limit 1000
 ```
 
-Or launch the FastAPI server:
+## Run
+
+Start the API:
 
 ```bash
-uvicorn main:app --reload
+uv run uvicorn chefai.main:app --reload
 ```
 
-Visit: [http://localhost:8000/docs](http://localhost:8000/docs)
+Open the interactive API docs:
 
----
+```text
+http://localhost:8000/docs
+```
 
-## ✅ Making a Pull Request
+## Checks
 
-1. Create a new branch
+Run tests:
 
 ```bash
-git checkout -b your-feature-name
+uv run --extra dev pytest
 ```
 
-2. Make your changes, test thoroughly, then commit:
+Run linting:
 
 ```bash
-git add .
-git commit -m "Add: your change summary"
+uv run --extra dev ruff check .
 ```
 
-3. Push and create PR:
+## Pull Requests
 
-```bash
-git push origin your-feature-name
-```
-
-4. Go to your GitHub fork and open a Pull Request against the main branch of the original repo.
-
----
-
-## 📌 Contribution Tips
-
-- Follow PEP8 and comment your code.
-- Keep commits atomic.
-- Test your changes before PR.
-- Use descriptive branch and commit names.
-
-Thanks for contributing! ❤️
+- Keep pull requests small and focused.
+- Add or update tests for behavior changes.
+- Use conventional commit messages, such as `feat: add search filter`.
+- Avoid committing local datasets, virtual environments, or generated cache files.

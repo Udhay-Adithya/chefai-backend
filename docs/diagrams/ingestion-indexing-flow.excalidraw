@@ -23,10 +23,17 @@
       "roundness": null,
       "seed": 3001,
       "version": 2,
+<<<<<<< HEAD
       "versionNonce": 1920016547,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1782020639927,
+=======
+      "versionNonce": 1619761762,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1781948118152,
+>>>>>>> 67990a9cafaf7058a56b7f3ed4754e2863052e34
       "link": null,
       "locked": false,
       "text": "ingestion and indexing flow",
@@ -62,10 +69,17 @@
       },
       "seed": 3002,
       "version": 2,
+<<<<<<< HEAD
       "versionNonce": 19459853,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1782020639927,
+=======
+      "versionNonce": 1935357118,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1781948118152,
+>>>>>>> 67990a9cafaf7058a56b7f3ed4754e2863052e34
       "link": null,
       "locked": false,
       "index": "a1"
@@ -73,10 +87,17 @@
     {
       "id": "csv-text",
       "type": "text",
+<<<<<<< HEAD
       "x": 94.33331298828125,
       "y": 154,
       "width": 134,
       "height": 63,
+=======
+      "x": 69.28807067871094,
+      "y": 153,
+      "width": 181.42385864257812,
+      "height": 80,
+>>>>>>> 67990a9cafaf7058a56b7f3ed4754e2863052e34
       "angle": 0,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "transparent",
@@ -89,11 +110,19 @@
       "frameId": null,
       "roundness": null,
       "seed": 3003,
+<<<<<<< HEAD
       "version": 21,
       "versionNonce": 1975348483,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1782020651598,
+=======
+      "version": 3,
+      "versionNonce": 70363582,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1781948127437,
+>>>>>>> 67990a9cafaf7058a56b7f3ed4754e2863052e34
       "link": null,
       "locked": false,
       "text": "data/full_dataset.csv\n\ntitle, ner,\ndirections, source",
@@ -129,10 +158,17 @@
       },
       "seed": 3004,
       "version": 2,
+<<<<<<< HEAD
       "versionNonce": 2041677165,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1782020639927,
+=======
+      "versionNonce": 1574038782,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1781948118152,
+>>>>>>> 67990a9cafaf7058a56b7f3ed4754e2863052e34
       "link": null,
       "locked": false,
       "index": "a3"
@@ -140,10 +176,10 @@
     {
       "id": "parse-text",
       "type": "text",
-      "x": 388,
-      "y": 153,
-      "width": 144,
-      "height": 63,
+      "x": 395.54002380371094,
+      "y": 152.61309814453125,
+      "width": 129.66390991210938,
+      "height": 80,
       "angle": 0,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "transparent",
@@ -156,11 +192,19 @@
       "frameId": null,
       "roundness": null,
       "seed": 3005,
+<<<<<<< HEAD
       "version": 2,
       "versionNonce": 1478857699,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1782020639927,
+=======
+      "version": 4,
+      "versionNonce": 357003326,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1781948119231,
+>>>>>>> 67990a9cafaf7058a56b7f3ed4754e2863052e34
       "link": null,
       "locked": false,
       "text": "parse row\n\nclean list fields\nbuild recipe text",
@@ -196,10 +240,17 @@
       },
       "seed": 3006,
       "version": 2,
+<<<<<<< HEAD
       "versionNonce": 1436045261,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1782020639927,
+=======
+      "versionNonce": 1900518718,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1781948118152,
+>>>>>>> 67990a9cafaf7058a56b7f3ed4754e2863052e34
       "link": null,
       "locked": false,
       "index": "a5"
@@ -224,10 +275,17 @@
       "roundness": null,
       "seed": 3007,
       "version": 2,
+<<<<<<< HEAD
       "versionNonce": 716119939,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1782020639927,
+=======
+      "versionNonce": 1585077666,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1781948118152,
+>>>>>>> 67990a9cafaf7058a56b7f3ed4754e2863052e34
       "link": null,
       "locked": false,
       "text": "infer metadata\n\ndiet tags, allergens\nequipment, cook time\ncost level",
@@ -263,10 +321,17 @@
       },
       "seed": 3008,
       "version": 2,
+<<<<<<< HEAD
       "versionNonce": 1928777261,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1782020639927,
+=======
+      "versionNonce": 589120894,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1781948118152,
+>>>>>>> 67990a9cafaf7058a56b7f3ed4754e2863052e34
       "link": null,
       "locked": false,
       "index": "a7"
@@ -274,10 +339,10 @@
     {
       "id": "document-text",
       "type": "text",
-      "x": 1032,
+      "x": 1038.8560333251953,
       "y": 153,
-      "width": 136,
-      "height": 63,
+      "width": 122.28793334960938,
+      "height": 80,
       "angle": 0,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "transparent",
@@ -290,11 +355,19 @@
       "frameId": null,
       "roundness": null,
       "seed": 3009,
+<<<<<<< HEAD
       "version": 2,
       "versionNonce": 2001090339,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1782020639927,
+=======
+      "version": 3,
+      "versionNonce": 658519102,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1781948130649,
+>>>>>>> 67990a9cafaf7058a56b7f3ed4754e2863052e34
       "link": null,
       "locked": false,
       "text": "recipe document\n\npydantic model\nqdrant payload",
@@ -330,10 +403,17 @@
       },
       "seed": 3010,
       "version": 2,
+<<<<<<< HEAD
       "versionNonce": 817266829,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1782020639927,
+=======
+      "versionNonce": 345236926,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1781948118152,
+>>>>>>> 67990a9cafaf7058a56b7f3ed4754e2863052e34
       "link": null,
       "locked": false,
       "index": "a9"
@@ -341,10 +421,10 @@
     {
       "id": "batch-text",
       "type": "text",
-      "x": 394,
+      "x": 394.52803802490234,
       "y": 383,
-      "width": 132,
-      "height": 63,
+      "width": 130.9439239501953,
+      "height": 80,
       "angle": 0,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "transparent",
@@ -357,11 +437,19 @@
       "frameId": null,
       "roundness": null,
       "seed": 3011,
+<<<<<<< HEAD
       "version": 2,
       "versionNonce": 1012488899,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1782020639927,
+=======
+      "version": 3,
+      "versionNonce": 1549203618,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1781948128328,
+>>>>>>> 67990a9cafaf7058a56b7f3ed4754e2863052e34
       "link": null,
       "locked": false,
       "text": "batch documents\n\nconfigurable size\ndefault 128",
@@ -397,10 +485,17 @@
       },
       "seed": 3012,
       "version": 2,
+<<<<<<< HEAD
       "versionNonce": 1418782445,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1782020639927,
+=======
+      "versionNonce": 382500350,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1781948118152,
+>>>>>>> 67990a9cafaf7058a56b7f3ed4754e2863052e34
       "link": null,
       "locked": false,
       "index": "aB"
@@ -408,10 +503,10 @@
     {
       "id": "embed-text",
       "type": "text",
-      "x": 704,
+      "x": 713.0320434570312,
       "y": 383,
-      "width": 152,
-      "height": 63,
+      "width": 133.9359130859375,
+      "height": 80,
       "angle": 0,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "transparent",
@@ -424,11 +519,19 @@
       "frameId": null,
       "roundness": null,
       "seed": 3013,
+<<<<<<< HEAD
       "version": 2,
       "versionNonce": 646384227,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1782020639927,
+=======
+      "version": 3,
+      "versionNonce": 704238334,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1781948129216,
+>>>>>>> 67990a9cafaf7058a56b7f3ed4754e2863052e34
       "link": null,
       "locked": false,
       "text": "embedding service\n\ndense vector\nsparse vector",
@@ -464,10 +567,17 @@
       },
       "seed": 3014,
       "version": 2,
+<<<<<<< HEAD
       "versionNonce": 823099725,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1782020639927,
+=======
+      "versionNonce": 784862782,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1781948118152,
+>>>>>>> 67990a9cafaf7058a56b7f3ed4754e2863052e34
       "link": null,
       "locked": false,
       "index": "aD"
@@ -475,10 +585,10 @@
     {
       "id": "upsert-text",
       "type": "text",
-      "x": 1028,
+      "x": 1043.6240310668945,
       "y": 383,
-      "width": 144,
-      "height": 63,
+      "width": 112.75193786621094,
+      "height": 80,
       "angle": 0,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "transparent",
@@ -491,11 +601,19 @@
       "frameId": null,
       "roundness": null,
       "seed": 3015,
+<<<<<<< HEAD
       "version": 2,
       "versionNonce": 1251853827,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1782020639927,
+=======
+      "version": 3,
+      "versionNonce": 1560105826,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1781948129866,
+>>>>>>> 67990a9cafaf7058a56b7f3ed4754e2863052e34
       "link": null,
       "locked": false,
       "text": "qdrant upsert\n\nid, payload,\nnamed vectors",
@@ -531,10 +649,17 @@
       },
       "seed": 3016,
       "version": 2,
+<<<<<<< HEAD
       "versionNonce": 193712045,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1782020639927,
+=======
+      "versionNonce": 426219134,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1781948118152,
+>>>>>>> 67990a9cafaf7058a56b7f3ed4754e2863052e34
       "link": null,
       "locked": false,
       "points": [
@@ -576,10 +701,17 @@
       },
       "seed": 3017,
       "version": 2,
+<<<<<<< HEAD
       "versionNonce": 530320803,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1782020639927,
+=======
+      "versionNonce": 1130469474,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1781948118152,
+>>>>>>> 67990a9cafaf7058a56b7f3ed4754e2863052e34
       "link": null,
       "locked": false,
       "points": [
@@ -621,10 +753,17 @@
       },
       "seed": 3018,
       "version": 2,
+<<<<<<< HEAD
       "versionNonce": 1110397453,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1782020639927,
+=======
+      "versionNonce": 1332483774,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1781948118152,
+>>>>>>> 67990a9cafaf7058a56b7f3ed4754e2863052e34
       "link": null,
       "locked": false,
       "points": [
@@ -666,10 +805,17 @@
       },
       "seed": 3019,
       "version": 2,
+<<<<<<< HEAD
       "versionNonce": 951083331,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1782020639927,
+=======
+      "versionNonce": 1041513506,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1781948118152,
+>>>>>>> 67990a9cafaf7058a56b7f3ed4754e2863052e34
       "link": null,
       "locked": false,
       "points": [
@@ -711,10 +857,17 @@
       },
       "seed": 3020,
       "version": 2,
+<<<<<<< HEAD
       "versionNonce": 838043757,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1782020639927,
+=======
+      "versionNonce": 158764798,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1781948118152,
+>>>>>>> 67990a9cafaf7058a56b7f3ed4754e2863052e34
       "link": null,
       "locked": false,
       "points": [
@@ -756,10 +909,17 @@
       },
       "seed": 3021,
       "version": 2,
+<<<<<<< HEAD
       "versionNonce": 1060716771,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1782020639927,
+=======
+      "versionNonce": 1513908194,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1781948118152,
+>>>>>>> 67990a9cafaf7058a56b7f3ed4754e2863052e34
       "link": null,
       "locked": false,
       "points": [

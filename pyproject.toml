@@ -36,18 +36,6 @@ packages = ["src/chefai"]
 [tool.ruff]
 line-length = 100
 target-version = "py311"
-extend-exclude = [
-    "src/config.py",
-    "src/db.py",
-    "src/ed.py",
-    "src/embedd.py",
-    "src/main.py",
-    "src/model.py",
-    "src/preprocess.py",
-    "src/python_to_sql.py",
-    "src/search.py",
-    "src/test.py",
-]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
