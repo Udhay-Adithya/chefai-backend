@@ -26,3 +26,7 @@ class RecipeDocument(BaseModel):
     equipment: list[str] = Field(default_factory=list)
     cook_time_minutes: int | None = None
     cost_level: str = "medium"
+
+    # Fingerprint of the source fields, used to skip unchanged recipes on
+    # re-ingest so they are not embedded again.
+    content_hash: str = ""

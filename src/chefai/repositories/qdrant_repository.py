@@ -4,6 +4,7 @@ from qdrant_client import QdrantClient, models
 
 from chefai.api.schemas.search import BudgetLevel, SearchConstraints
 from chefai.core.config import Settings, get_settings
+from chefai.data.identity import recipe_point_id
 from chefai.data.models import RecipeDocument
 from chefai.services.types import QueryVectors, SearchCandidate
 
@@ -66,6 +67,27 @@ class QdrantRecipeRepository:
                 field_schema=schema,
             )
 
+    def existing_hashes(self, point_ids: list[str]) -> dict[str, str]:
+        """Content hashes of the points that are already indexed.
+
+        Lets ingestion skip recipes that have not changed rather than embedding
+        them again, which is the difference between a cheap nightly top-up and
+        a full re-index.
+        """
+        if not point_ids:
+            return {}
+
+        records = self._client.retrieve(
+            collection_name=self._settings.qdrant_collection,
+            ids=list(point_ids),
+            with_payload=["content_hash"],
+            with_vectors=False,
+        )
+        return {
+            str(record.id): str((record.payload or {}).get("content_hash") or "")
+            for record in records
+        }
+
     def upsert_recipes(
         self,
         recipes: list[RecipeDocument],
@@ -73,7 +95,7 @@ class QdrantRecipeRepository:
     ) -> None:
         points = [
             models.PointStruct(
-                id=self._point_id(recipe.id),
+                id=recipe_point_id(recipe),
                 vector={
                     "dense": vector.dense,
                     "sparse": vector.sparse,
@@ -135,12 +157,6 @@ class QdrantRecipeRepository:
             )
             for point in points
         ]
-
-    def _point_id(self, value: str) -> int | str:
-        try:
-            return int(value)
-        except ValueError:
-            return value
 
 
 def build_qdrant_filter(constraints: SearchConstraints) -> models.Filter | None:
