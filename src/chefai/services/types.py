@@ -5,8 +5,17 @@ from qdrant_client import models
 
 @dataclass(frozen=True)
 class QueryVectors:
+    """Vectors for one recipe or one query.
+
+    ``sparse`` indexes the whole recipe text, while ``ingredients_sparse``
+    indexes canonical ingredient names alone. Ingredient names are the part of
+    the query that must match lexically, and keeping them in their own index
+    stops long method text from diluting the term statistics.
+    """
+
     dense: list[float]
     sparse: models.SparseVector
+    ingredients_sparse: models.SparseVector
 
 
 @dataclass

@@ -3,6 +3,7 @@ from functools import lru_cache
 from chefai.api.schemas.recipe import RecipeRecommendation
 from chefai.api.schemas.search import RecipeSearchRequest, RecipeSearchResponse
 from chefai.core.config import Settings, get_settings
+from chefai.data.ingredients import canonicalize_all
 from chefai.repositories.qdrant_repository import QdrantRecipeRepository, get_qdrant_repository
 from chefai.services.constraint_service import ConstraintService
 from chefai.services.embedding_service import EmbeddingService, get_embedding_service
@@ -28,8 +29,10 @@ class SearchService:
     def search(self, request: RecipeSearchRequest) -> RecipeSearchResponse:
         limit = min(request.limit, self._settings.max_limit)
         candidate_limit = max(self._settings.hybrid_candidate_limit, limit * 5)
+        pantry = canonicalize_all(request.ingredients)
+        ingredient_text = " ".join(pantry.canonical or request.ingredients)
         query_text = self._query_text(request.ingredients)
-        query_vectors = self._embedding_service.embed_query(query_text)
+        query_vectors = self._embedding_service.embed_query(query_text, ingredient_text)
 
         candidates = self._repository.hybrid_search(
             vectors=query_vectors,

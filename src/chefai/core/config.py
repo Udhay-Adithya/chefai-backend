@@ -1,6 +1,5 @@
 from functools import lru_cache
 
-from pydantic import Field, HttpUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -10,7 +9,7 @@ class Settings(BaseSettings):
     app_name: str = "ChefAI"
     environment: str = "local"
 
-    qdrant_url: HttpUrl = Field(default="http://localhost:6333")
+    qdrant_url: str = "http://localhost:6333"
     qdrant_api_key: str | None = None
     qdrant_collection: str = "recipes"
 

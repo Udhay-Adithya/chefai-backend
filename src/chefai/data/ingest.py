@@ -115,7 +115,10 @@ def _upsert_batch(
     embedding_service: EmbeddingService,
     batch: list[RecipeDocument],
 ) -> None:
-    vectors = embedding_service.embed_documents([recipe.text for recipe in batch])
+    vectors = embedding_service.embed_documents(
+        [recipe.text for recipe in batch],
+        [" ".join(recipe.canonical_ingredients) for recipe in batch],
+    )
     repository.upsert_recipes(batch, vectors)
     logger.info("Upserted %s recipes", len(batch))
 

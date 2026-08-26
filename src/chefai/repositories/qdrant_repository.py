@@ -25,12 +25,9 @@ BUDGET_ORDER = {
 
 
 class QdrantRecipeRepository:
-    def __init__(self, settings: Settings) -> None:
+    def __init__(self, settings: Settings, client: QdrantClient | None = None) -> None:
         self._settings = settings
-        self._client = QdrantClient(
-            url=str(settings.qdrant_url),
-            api_key=settings.qdrant_api_key or None,
-        )
+        self._client = client or _build_client(settings)
 
     def ensure_collection(self) -> None:
         if self._client.collection_exists(self._settings.qdrant_collection):
@@ -47,7 +44,10 @@ class QdrantRecipeRepository:
             sparse_vectors_config={
                 "sparse": models.SparseVectorParams(
                     index=models.SparseIndexParams(on_disk=False),
-                )
+                ),
+                "ingredients_sparse": models.SparseVectorParams(
+                    index=models.SparseIndexParams(on_disk=False),
+                ),
             },
         )
         self._create_payload_indexes()
@@ -77,6 +77,7 @@ class QdrantRecipeRepository:
                 vector={
                     "dense": vector.dense,
                     "sparse": vector.sparse,
+                    "ingredients_sparse": vector.ingredients_sparse,
                 },
                 payload=recipe.model_dump(mode="json"),
             )
@@ -97,8 +98,16 @@ class QdrantRecipeRepository:
         response = self._client.query_points(
             collection_name=self._settings.qdrant_collection,
             prefetch=[
-                models.Prefetch(query=vectors.dense, using="dense", limit=limit),
+                # Ingredient names are the part of the query that has to match
+                # literally, so they get their own lexical branch alongside
+                # full-text lexical and semantic retrieval.
+                models.Prefetch(
+                    query=vectors.ingredients_sparse,
+                    using="ingredients_sparse",
+                    limit=limit,
+                ),
                 models.Prefetch(query=vectors.sparse, using="sparse", limit=limit),
+                models.Prefetch(query=vectors.dense, using="dense", limit=limit),
             ],
             query=models.FusionQuery(fusion=models.Fusion.RRF),
             query_filter=build_qdrant_filter(constraints),
@@ -165,6 +174,18 @@ def build_qdrant_filter(constraints: SearchConstraints) -> models.Filter | None:
     if not must:
         return None
     return models.Filter(must=must)
+
+
+def _build_client(settings: Settings) -> QdrantClient:
+    """Build a qdrant client, allowing an in-process store for tests.
+
+    ``CHEFAI_QDRANT_URL=:memory:`` runs the local implementation, which lets the
+    ingest-and-search path be exercised without a server.
+    """
+    url = str(settings.qdrant_url)
+    if url in {":memory:", "memory"}:
+        return QdrantClient(location=":memory:")
+    return QdrantClient(url=url, api_key=settings.qdrant_api_key or None)
 
 
 @lru_cache
