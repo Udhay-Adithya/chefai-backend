@@ -95,6 +95,12 @@ class QdrantRecipeRepository:
         constraints: SearchConstraints,
         limit: int,
     ) -> list[SearchCandidate]:
+        # The filter has to live on each prefetch branch. A filter passed
+        # alongside a FusionQuery applies to the fusion step, which only merges
+        # ids already retrieved, so branch-level filtering is what actually
+        # removes non-matching recipes -- and it also stops the candidate budget
+        # being spent on recipes that will be discarded.
+        query_filter = build_qdrant_filter(constraints)
         response = self._client.query_points(
             collection_name=self._settings.qdrant_collection,
             prefetch=[
@@ -105,12 +111,17 @@ class QdrantRecipeRepository:
                     query=vectors.ingredients_sparse,
                     using="ingredients_sparse",
                     limit=limit,
+                    filter=query_filter,
                 ),
-                models.Prefetch(query=vectors.sparse, using="sparse", limit=limit),
-                models.Prefetch(query=vectors.dense, using="dense", limit=limit),
+                models.Prefetch(
+                    query=vectors.sparse, using="sparse", limit=limit, filter=query_filter
+                ),
+                models.Prefetch(
+                    query=vectors.dense, using="dense", limit=limit, filter=query_filter
+                ),
             ],
             query=models.FusionQuery(fusion=models.Fusion.RRF),
-            query_filter=build_qdrant_filter(constraints),
+            query_filter=query_filter,
             limit=limit,
             with_payload=True,
         )

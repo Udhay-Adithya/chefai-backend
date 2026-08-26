@@ -31,6 +31,17 @@ UNVERIFIABLE_PENALTY_CAP = 5
 
 class ConstraintService:
     def passes_post_filters(self, payload: dict, constraints: SearchConstraints) -> bool:
+        """Re-check hard constraints on retrieved payloads.
+
+        This duplicates the store-side filter on purpose. Diet and allergen
+        exclusions are the constraints where a leak actually harms someone, so
+        they are enforced again on the way out rather than trusted to one layer.
+        """
+        verified_diets = set(payload.get("diet_tags") or [])
+        for field_name, tag in DIET_TAG_FIELDS.items():
+            if getattr(constraints, field_name) and tag not in verified_diets:
+                return False
+
         if constraints.allergies:
             cleared = set(payload.get("allergen_free") or [])
             if not set(constraints.allergies).issubset(cleared):

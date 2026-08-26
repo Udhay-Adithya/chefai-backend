@@ -43,3 +43,6 @@ select = ["E", "F", "I", "UP", "B"]
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
+markers = [
+    "integration: exercises ingest and search against an in-process qdrant; downloads models",
+]
