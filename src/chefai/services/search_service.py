@@ -54,7 +54,8 @@ class SearchService:
             candidates = [candidate for candidate in candidates if candidate.makeable]
 
         candidates = self._rerank_service.rerank(query_text, candidates)
-        ranked = sorted(candidates, key=self._final_score, reverse=True)[:limit]
+        self._apply_final_scores(candidates)
+        ranked = sorted(candidates, key=lambda item: item.final_score, reverse=True)[:limit]
 
         return RecipeSearchResponse(
             query_ingredients=request.ingredients,
@@ -66,11 +67,24 @@ class SearchService:
     def _query_text(self, ingredients: list[str]) -> str:
         return "Ingredients: " + ", ".join(ingredients)
 
-    def _final_score(self, candidate: SearchCandidate) -> float:
-        hybrid = candidate.hybrid_score or 0.0
-        rerank = candidate.rerank_score or 0.0
-        candidate.final_score = (hybrid * 0.25) + (rerank * 0.5) + candidate.domain_score
-        return candidate.final_score
+    def _apply_final_scores(self, candidates: list[SearchCandidate]) -> None:
+        """Combine the domain score with normalised retrieval scores.
+
+        RRF fusion scores sit around 0.02 while cross-encoder outputs are raw
+        logits spanning roughly -11..11, so combining them raw let the reranker
+        swamp every other signal while hybrid retrieval contributed almost
+        nothing. Both are rescaled to 0..1 within the candidate set first, which
+        makes the weights mean what they say.
+        """
+        hybrid = _normalise([candidate.hybrid_score for candidate in candidates])
+        rerank = _normalise([candidate.rerank_score for candidate in candidates])
+
+        for index, candidate in enumerate(candidates):
+            candidate.final_score = (
+                candidate.domain_score
+                + hybrid[index] * self._settings.hybrid_weight
+                + rerank[index] * self._settings.rerank_weight
+            )
 
     def _to_recommendation(self, candidate: SearchCandidate) -> RecipeRecommendation:
         payload = candidate.payload
@@ -96,6 +110,19 @@ class SearchService:
             missing_ingredients=candidate.missing_ingredients,
             unverifiable_ingredients=candidate.unverifiable_ingredients,
         )
+
+
+def _normalise(scores: list[float | None]) -> list[float]:
+    """Min-max rescale to 0..1, treating a missing or flat signal as neutral."""
+    present = [score for score in scores if score is not None]
+    if not present:
+        return [0.0] * len(scores)
+
+    lowest, highest = min(present), max(present)
+    span = highest - lowest
+    if span <= 0:
+        return [0.0 if score is None else 1.0 for score in scores]
+    return [0.0 if score is None else (score - lowest) / span for score in scores]
 
 
 @lru_cache

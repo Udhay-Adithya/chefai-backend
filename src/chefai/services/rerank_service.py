@@ -16,11 +16,12 @@ logger = get_logger(__name__)
 class RerankService:
     def __init__(self, settings: Settings) -> None:
         self._model_name = settings.rerank_model
+        self._enabled = settings.rerank_enabled
         self._model: TextCrossEncoder | None = None
 
     def rerank(self, query: str, candidates: list[SearchCandidate]) -> list[SearchCandidate]:
-        if not candidates:
-            return []
+        if not candidates or not self._enabled:
+            return candidates
 
         try:
             model = self._get_model()
