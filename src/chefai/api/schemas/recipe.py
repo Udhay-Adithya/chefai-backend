@@ -16,6 +16,19 @@ class RecipeRecommendation(BaseModel):
     score: float
     hybrid_score: float | None = None
     rerank_score: float | None = None
-    ingredient_coverage: float
-    missing_ingredients: list[str] = Field(default_factory=list)
+
+    recipe_coverage: float = Field(
+        description="Fraction of the recipe's non-staple ingredients the pantry supplies."
+    )
+    pantry_coverage: float = Field(
+        description="Fraction of the supplied ingredients this recipe actually uses."
+    )
+    makeable: bool = Field(
+        description="True when nothing is missing and every ingredient was recognised."
+    )
     matched_ingredients: list[str] = Field(default_factory=list)
+    missing_ingredients: list[str] = Field(default_factory=list)
+    unverifiable_ingredients: list[str] = Field(
+        default_factory=list,
+        description="Recipe ingredients outside the known vocabulary; availability unknown.",
+    )

@@ -50,6 +50,9 @@ class SearchService:
             )
             for candidate in candidates
         ]
+        if request.constraints.require_makeable:
+            candidates = [candidate for candidate in candidates if candidate.makeable]
+
         candidates = self._rerank_service.rerank(query_text, candidates)
         ranked = sorted(candidates, key=self._final_score, reverse=True)[:limit]
 
@@ -86,9 +89,12 @@ class SearchService:
             score=candidate.final_score,
             hybrid_score=candidate.hybrid_score,
             rerank_score=candidate.rerank_score,
-            ingredient_coverage=candidate.ingredient_coverage,
-            missing_ingredients=candidate.missing_ingredients,
+            recipe_coverage=candidate.recipe_coverage,
+            pantry_coverage=candidate.pantry_coverage,
+            makeable=candidate.makeable,
             matched_ingredients=candidate.matched_ingredients,
+            missing_ingredients=candidate.missing_ingredients,
+            unverifiable_ingredients=candidate.unverifiable_ingredients,
         )
 
 
