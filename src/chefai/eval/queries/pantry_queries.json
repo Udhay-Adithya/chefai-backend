@@ -1,0 +1,17 @@
+[
+  {"id": "staples-only", "ingredients": ["rice", "onion", "tomato"]},
+  {"id": "pasta-night", "ingredients": ["pasta", "garlic", "olive oil", "parmesan cheese"]},
+  {"id": "breakfast", "ingredients": ["egg", "milk", "bread", "butter"]},
+  {"id": "roast-chicken", "ingredients": ["chicken", "potato", "carrot", "onion", "garlic"]},
+  {"id": "baking", "ingredients": ["all-purpose flour", "sugar", "egg", "butter", "vanilla extract"]},
+  {"id": "stir-fry", "ingredients": ["chicken breast", "soy sauce", "ginger", "garlic", "bell pepper", "rice"]},
+  {"id": "soup", "ingredients": ["chicken broth", "carrot", "celery", "onion", "noodle"]},
+  {"id": "salad", "ingredients": ["lettuce", "tomato", "cucumber", "olive oil", "lemon"]},
+  {"id": "bean-chili", "ingredients": ["kidney bean", "tomato", "onion", "chili powder", "ground beef"]},
+  {"id": "sparse-pantry", "ingredients": ["egg", "potato"]},
+  {"id": "vegan-bowl", "ingredients": ["chickpea", "spinach", "rice", "lemon"], "constraints": {"vegan": true}},
+  {"id": "gluten-free-dinner", "ingredients": ["rice", "chicken", "broccoli"], "constraints": {"gluten_free": true}},
+  {"id": "nut-allergy", "ingredients": ["chicken", "rice", "carrot"], "constraints": {"allergies": ["peanut", "tree_nut"]}},
+  {"id": "quick-weeknight", "ingredients": ["pasta", "tomato sauce", "cheese"], "constraints": {"max_cooking_time_minutes": 30}},
+  {"id": "dessert", "ingredients": ["chocolate", "butter", "sugar", "egg", "all-purpose flour"]}
+]

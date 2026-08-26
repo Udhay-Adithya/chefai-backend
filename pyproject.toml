@@ -25,6 +25,7 @@ dev = [
 
 [project.scripts]
 chefai-ingest = "chefai.data.ingest:main"
+chefai-eval = "chefai.eval.runner:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -32,6 +33,9 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/chefai"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"src/chefai/eval/queries" = "chefai/eval/queries"
 
 [tool.ruff]
 line-length = 100
