@@ -8,78 +8,14 @@ import pandas as pd
 
 from chefai.core.config import get_settings
 from chefai.core.logging import get_logger
+from chefai.data.dietary import analyse, infer_cost_level
+from chefai.data.ingredients import canonicalize_all
 from chefai.data.models import RecipeDocument
 from chefai.repositories.qdrant_repository import QdrantRecipeRepository
 from chefai.services.embedding_service import EmbeddingService
 
 logger = get_logger(__name__)
 
-MEAT_KEYWORDS = {
-    "anchovy",
-    "bacon",
-    "beef",
-    "chicken",
-    "fish",
-    "ham",
-    "lamb",
-    "meat",
-    "mutton",
-    "pork",
-    "salmon",
-    "sausage",
-    "shrimp",
-    "turkey",
-}
-SEAFOOD_KEYWORDS = {"fish", "salmon", "shrimp", "prawn", "crab", "lobster", "tuna"}
-DAIRY_EGG_KEYWORDS = {"butter", "cheese", "cream", "egg", "ghee", "honey", "milk", "yogurt"}
-JAIN_EXCLUDED_KEYWORDS = {
-    "beetroot",
-    "carrot",
-    "garlic",
-    "ginger",
-    "mushroom",
-    "onion",
-    "potato",
-    "radish",
-}
-HARAM_KEYWORDS = {"alcohol", "bacon", "beer", "ham", "pork", "rum", "wine"}
-GLUTEN_KEYWORDS = {"barley", "bread", "flour", "pasta", "rye", "wheat"}
-CARB_KEYWORDS = {
-    "bread",
-    "corn syrup",
-    "flour",
-    "honey",
-    "noodle",
-    "pasta",
-    "potato",
-    "rice",
-    "sugar",
-}
-SUGAR_KEYWORDS = {"brown sugar", "corn syrup", "honey", "molasses", "sugar", "syrup"}
-EXPENSIVE_KEYWORDS = {
-    "almond",
-    "beef",
-    "cashew",
-    "lamb",
-    "lobster",
-    "pecan",
-    "prawn",
-    "saffron",
-    "salmon",
-    "shrimp",
-    "walnut",
-}
-ALLERGEN_KEYWORDS = {
-    "egg": {"egg"},
-    "fish": {"fish", "salmon", "tuna"},
-    "milk": {"butter", "cheese", "cream", "milk", "yogurt"},
-    "peanut": {"peanut"},
-    "sesame": {"sesame"},
-    "shellfish": {"crab", "lobster", "prawn", "shrimp"},
-    "soy": {"soy", "tofu"},
-    "tree_nut": {"almond", "cashew", "nut", "pecan", "walnut"},
-    "wheat": {"bread", "flour", "pasta", "wheat"},
-}
 EQUIPMENT_KEYWORDS = {
     "blender": {"blend", "blender"},
     "grill": {"grill"},
@@ -150,8 +86,8 @@ def recipe_from_row(index: int, row: pd.Series) -> RecipeDocument:
     title = str(row.get("title") or "Untitled recipe").strip()
     ingredients = _parse_list(row.get("NER")) or _parse_list(row.get("ingredients"))
     directions = _parse_list(row.get("directions"))
-    text = _recipe_text(title, ingredients, directions)
-    ingredient_text = " ".join(ingredients).lower()
+    resolved = canonicalize_all(ingredients)
+    profile = analyse(resolved.canonical, resolved.fully_recognised)
     direction_text = " ".join(directions).lower()
 
     return RecipeDocument(
@@ -161,12 +97,16 @@ def recipe_from_row(index: int, row: pd.Series) -> RecipeDocument:
         directions=directions,
         source=_optional_str(row.get("source")),
         link=_optional_str(row.get("link")),
-        text=text,
-        diet_tags=_infer_diet_tags(ingredient_text),
-        allergens=_infer_allergens(ingredient_text),
+        text=_recipe_text(title, resolved.canonical or ingredients, directions),
+        canonical_ingredients=resolved.canonical,
+        unknown_ingredients=resolved.unknown,
+        diet_tags=profile.diet_tags,
+        diet_excluded=profile.diet_excluded,
+        allergens=profile.allergens,
+        allergen_free=profile.allergen_free,
         equipment=_infer_equipment(direction_text),
         cook_time_minutes=_infer_cook_time(direction_text),
-        cost_level=_infer_cost_level(ingredient_text),
+        cost_level=infer_cost_level(resolved.canonical),
     )
 
 
@@ -209,39 +149,6 @@ def _recipe_text(title: str, ingredients: list[str], directions: list[str]) -> s
     )
 
 
-def _infer_diet_tags(ingredient_text: str) -> list[str]:
-    tags: list[str] = []
-    has_meat = _contains_any(ingredient_text, MEAT_KEYWORDS | SEAFOOD_KEYWORDS)
-    has_dairy_or_egg = _contains_any(ingredient_text, DAIRY_EGG_KEYWORDS)
-
-    if not has_meat:
-        tags.append("vegetarian")
-    if not has_meat and not has_dairy_or_egg:
-        tags.append("vegan")
-    if not has_meat and not has_dairy_or_egg and not _contains_any(
-        ingredient_text, JAIN_EXCLUDED_KEYWORDS
-    ):
-        tags.append("jain")
-    if not _contains_any(ingredient_text, HARAM_KEYWORDS):
-        tags.append("halal")
-    if not _contains_any(ingredient_text, GLUTEN_KEYWORDS):
-        tags.append("gluten_free")
-    if not _contains_any(ingredient_text, CARB_KEYWORDS):
-        tags.append("keto")
-    if not _contains_any(ingredient_text, SUGAR_KEYWORDS):
-        tags.append("diabetes_friendly")
-    return tags
-
-
-def _infer_allergens(ingredient_text: str) -> list[str]:
-    allergens = [
-        allergen
-        for allergen, keywords in ALLERGEN_KEYWORDS.items()
-        if _contains_any(ingredient_text, keywords)
-    ]
-    return sorted(allergens)
-
-
 def _infer_equipment(direction_text: str) -> list[str]:
     equipment = [
         equipment_name
@@ -264,15 +171,6 @@ def _infer_cook_time(direction_text: str) -> int | None:
     if not values:
         return None
     return min(max(values), 1440)
-
-
-def _infer_cost_level(ingredient_text: str) -> str:
-    expensive_count = sum(1 for keyword in EXPENSIVE_KEYWORDS if keyword in ingredient_text)
-    if expensive_count >= 2:
-        return "high"
-    if expensive_count == 1:
-        return "medium"
-    return "low"
 
 
 def _contains_any(text: str, keywords: Iterable[str]) -> bool:

@@ -50,6 +50,21 @@ class QdrantRecipeRepository:
                 )
             },
         )
+        self._create_payload_indexes()
+
+    def _create_payload_indexes(self) -> None:
+        for field_name, schema in (
+            ("diet_tags", models.PayloadSchemaType.KEYWORD),
+            ("allergen_free", models.PayloadSchemaType.KEYWORD),
+            ("canonical_ingredients", models.PayloadSchemaType.KEYWORD),
+            ("cost_level", models.PayloadSchemaType.KEYWORD),
+            ("cook_time_minutes", models.PayloadSchemaType.INTEGER),
+        ):
+            self._client.create_payload_index(
+                collection_name=self._settings.qdrant_collection,
+                field_name=field_name,
+                field_schema=schema,
+            )
 
     def upsert_recipes(
         self,
@@ -110,7 +125,6 @@ class QdrantRecipeRepository:
 
 def build_qdrant_filter(constraints: SearchConstraints) -> models.Filter | None:
     must: list[models.Condition] = []
-    must_not: list[models.Condition] = []
 
     for field_name, tag in DIET_CONSTRAINTS.items():
         if getattr(constraints, field_name):
@@ -129,11 +143,14 @@ def build_qdrant_filter(constraints: SearchConstraints) -> models.Filter | None:
             )
         )
 
-    if constraints.allergies:
-        must_not.append(
+    # Require a positive all-clear rather than the absence of a detected
+    # allergen: a recipe whose ingredients we could not fully parse has not been
+    # cleared, and must not be served to someone who declared that allergy.
+    for allergen in constraints.allergies:
+        must.append(
             models.FieldCondition(
-                key="allergens",
-                match=models.MatchAny(any=constraints.allergies),
+                key="allergen_free",
+                match=models.MatchValue(value=allergen),
             )
         )
 
@@ -145,9 +162,9 @@ def build_qdrant_filter(constraints: SearchConstraints) -> models.Filter | None:
             )
         )
 
-    if not must and not must_not:
+    if not must:
         return None
-    return models.Filter(must=must or None, must_not=must_not or None)
+    return models.Filter(must=must)
 
 
 @lru_cache
