@@ -1,10 +1,14 @@
-from functools import lru_cache
+from __future__ import annotations
 
-from fastembed import TextCrossEncoder
+from functools import lru_cache
+from typing import TYPE_CHECKING
 
 from chefai.core.config import Settings, get_settings
 from chefai.core.logging import get_logger
 from chefai.services.types import SearchCandidate
+
+if TYPE_CHECKING:
+    from fastembed.rerank.cross_encoder import TextCrossEncoder
 
 logger = get_logger(__name__)
 
@@ -12,11 +16,12 @@ logger = get_logger(__name__)
 class RerankService:
     def __init__(self, settings: Settings) -> None:
         self._model_name = settings.rerank_model
+        self._enabled = settings.rerank_enabled
         self._model: TextCrossEncoder | None = None
 
     def rerank(self, query: str, candidates: list[SearchCandidate]) -> list[SearchCandidate]:
-        if not candidates:
-            return []
+        if not candidates or not self._enabled:
+            return candidates
 
         try:
             model = self._get_model()
@@ -32,7 +37,10 @@ class RerankService:
         return candidates
 
     def _get_model(self) -> TextCrossEncoder:
+        """Import lazily so a reranker problem cannot stop the api from booting."""
         if self._model is None:
+            from fastembed.rerank.cross_encoder import TextCrossEncoder
+
             self._model = TextCrossEncoder(model_name=self._model_name)
         return self._model
 

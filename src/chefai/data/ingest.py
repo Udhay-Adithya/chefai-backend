@@ -1,85 +1,23 @@
 import argparse
 import ast
 import re
-from collections.abc import Iterable
+from collections.abc import Iterable, Iterator
+from dataclasses import dataclass
 from pathlib import Path
 
 import pandas as pd
 
 from chefai.core.config import get_settings
 from chefai.core.logging import get_logger
+from chefai.data.dietary import analyse, infer_cost_level
+from chefai.data.identity import content_hash, recipe_point_id
+from chefai.data.ingredients import canonicalize_all
 from chefai.data.models import RecipeDocument
 from chefai.repositories.qdrant_repository import QdrantRecipeRepository
 from chefai.services.embedding_service import EmbeddingService
 
 logger = get_logger(__name__)
 
-MEAT_KEYWORDS = {
-    "anchovy",
-    "bacon",
-    "beef",
-    "chicken",
-    "fish",
-    "ham",
-    "lamb",
-    "meat",
-    "mutton",
-    "pork",
-    "salmon",
-    "sausage",
-    "shrimp",
-    "turkey",
-}
-SEAFOOD_KEYWORDS = {"fish", "salmon", "shrimp", "prawn", "crab", "lobster", "tuna"}
-DAIRY_EGG_KEYWORDS = {"butter", "cheese", "cream", "egg", "ghee", "honey", "milk", "yogurt"}
-JAIN_EXCLUDED_KEYWORDS = {
-    "beetroot",
-    "carrot",
-    "garlic",
-    "ginger",
-    "mushroom",
-    "onion",
-    "potato",
-    "radish",
-}
-HARAM_KEYWORDS = {"alcohol", "bacon", "beer", "ham", "pork", "rum", "wine"}
-GLUTEN_KEYWORDS = {"barley", "bread", "flour", "pasta", "rye", "wheat"}
-CARB_KEYWORDS = {
-    "bread",
-    "corn syrup",
-    "flour",
-    "honey",
-    "noodle",
-    "pasta",
-    "potato",
-    "rice",
-    "sugar",
-}
-SUGAR_KEYWORDS = {"brown sugar", "corn syrup", "honey", "molasses", "sugar", "syrup"}
-EXPENSIVE_KEYWORDS = {
-    "almond",
-    "beef",
-    "cashew",
-    "lamb",
-    "lobster",
-    "pecan",
-    "prawn",
-    "saffron",
-    "salmon",
-    "shrimp",
-    "walnut",
-}
-ALLERGEN_KEYWORDS = {
-    "egg": {"egg"},
-    "fish": {"fish", "salmon", "tuna"},
-    "milk": {"butter", "cheese", "cream", "milk", "yogurt"},
-    "peanut": {"peanut"},
-    "sesame": {"sesame"},
-    "shellfish": {"crab", "lobster", "prawn", "shrimp"},
-    "soy": {"soy", "tofu"},
-    "tree_nut": {"almond", "cashew", "nut", "pecan", "walnut"},
-    "wheat": {"bread", "flour", "pasta", "wheat"},
-}
 EQUIPMENT_KEYWORDS = {
     "blender": {"blend", "blender"},
     "grill": {"grill"},
@@ -91,93 +29,212 @@ EQUIPMENT_KEYWORDS = {
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Ingest recipes into Qdrant.")
+    parser = argparse.ArgumentParser(
+        description="Ingest recipes into Qdrant. Safe to re-run: recipes are "
+        "keyed by content, so an existing recipe is updated rather than duplicated."
+    )
     parser.add_argument("--input", default="data/full_dataset.csv", help="Recipe CSV path.")
     parser.add_argument("--batch-size", type=int, default=128)
     parser.add_argument("--limit", type=int, default=None)
+    parser.add_argument(
+        "--no-resume",
+        action="store_true",
+        help="Ignore any checkpoint and start from the first row.",
+    )
+    parser.add_argument(
+        "--reembed",
+        action="store_true",
+        help="Re-embed recipes even when their content is unchanged.",
+    )
     args = parser.parse_args()
 
-    ingest_recipes(Path(args.input), batch_size=args.batch_size, limit=args.limit)
+    stats = ingest_recipes(
+        Path(args.input),
+        batch_size=args.batch_size,
+        limit=args.limit,
+        resume=not args.no_resume,
+        skip_unchanged=not args.reembed,
+    )
+    logger.info(
+        "Done. %s read, %s indexed, %s unchanged.",
+        stats.read,
+        stats.indexed,
+        stats.skipped,
+    )
 
 
-def ingest_recipes(path: Path, batch_size: int = 128, limit: int | None = None) -> None:
+@dataclass
+class IngestStats:
+    read: int = 0
+    indexed: int = 0
+    skipped: int = 0
+
+
+def ingest_recipes(
+    path: Path,
+    batch_size: int = 128,
+    limit: int | None = None,
+    resume: bool = True,
+    skip_unchanged: bool = True,
+) -> IngestStats:
+    """Ingest a recipe CSV, adding new recipes and updating changed ones.
+
+    The file is streamed in chunks rather than read whole: the full corpus does
+    not fit comfortably in memory, and streaming is what lets a nightly delta
+    file and a full backfill use the same code path.
+    """
     settings = get_settings()
     repository = QdrantRecipeRepository(settings)
     embedding_service = EmbeddingService(settings)
     repository.ensure_collection()
 
-    logger.info("Reading recipes from %s", path)
-    
-    checkpoint_path = path.parent / f"{path.stem}_checkpoint.txt"
-    start_index = 0
-    if checkpoint_path.exists():
-        try:
-            start_index = int(checkpoint_path.read_text().strip())
-            logger.info("Found checkpoint. Resuming from row index %d", start_index)
-        except Exception as e:
-            logger.warning("Could not read checkpoint file: %s. Starting from scratch.", e)
+    checkpoint = _Checkpoint(path)
+    start_index = checkpoint.read() if resume else 0
+    if start_index:
+        logger.info("Resuming %s from row %s", path, start_index)
 
-    dataframe = pd.read_csv(path)
-    if limit:
-        dataframe = dataframe.head(limit)
-
-    if start_index > 0:
-        dataframe = dataframe.iloc[start_index:]
-
+    stats = IngestStats(read=start_index)
     batch: list[RecipeDocument] = []
-    processed_count = start_index
-    for index, row in dataframe.iterrows():
+
+    for index, row in _stream_rows(path, batch_size, limit, start_index):
         batch.append(recipe_from_row(index, row))
         if len(batch) >= batch_size:
-            _upsert_batch(repository, embedding_service, batch)
-            processed_count += len(batch)
-            try:
-                checkpoint_path.write_text(str(processed_count))
-            except Exception as e:
-                logger.warning("Failed to save checkpoint: %s", e)
+            _flush(repository, embedding_service, batch, stats, skip_unchanged)
+            checkpoint.write(stats.read)
             batch = []
 
     if batch:
-        _upsert_batch(repository, embedding_service, batch)
-        processed_count += len(batch)
+        _flush(repository, embedding_service, batch, stats, skip_unchanged)
+        checkpoint.write(stats.read)
+
+    return stats
+
+
+def ingest_documents(
+    recipes: list[RecipeDocument],
+    skip_unchanged: bool = True,
+) -> IngestStats:
+    """Add or update recipes that did not come from a CSV.
+
+    The entry point for incremental sources -- a scraper, a partner feed, a
+    user submission -- without going through a file.
+    """
+    settings = get_settings()
+    repository = QdrantRecipeRepository(settings)
+    embedding_service = EmbeddingService(settings)
+    repository.ensure_collection()
+
+    stats = IngestStats(read=len(recipes))
+    _flush(repository, embedding_service, list(recipes), stats, skip_unchanged, count_read=False)
+    return stats
+
+
+def _stream_rows(
+    path: Path,
+    chunk_size: int,
+    limit: int | None,
+    start_index: int,
+) -> Iterator[tuple[int, pd.Series]]:
+    seen = 0
+    for chunk in pd.read_csv(path, chunksize=max(chunk_size, 1)):
+        for index, row in chunk.iterrows():
+            if limit is not None and seen >= limit:
+                return
+            seen += 1
+            if seen <= start_index:
+                continue
+            yield int(index), row
+
+
+class _Checkpoint:
+    """Row cursor so an interrupted backfill resumes where it stopped."""
+
+    def __init__(self, path: Path) -> None:
+        self._path = path.parent / f"{path.stem}_checkpoint.txt"
+
+    def read(self) -> int:
+        if not self._path.exists():
+            return 0
         try:
-            checkpoint_path.write_text(str(processed_count))
-        except Exception as e:
-            logger.warning("Failed to save checkpoint: %s", e)
+            return int(self._path.read_text().strip())
+        except (OSError, ValueError) as error:
+            logger.warning("Ignoring unreadable checkpoint %s: %s", self._path, error)
+            return 0
+
+    def write(self, processed: int) -> None:
+        try:
+            self._path.write_text(str(processed))
+        except OSError as error:
+            logger.warning("Could not write checkpoint %s: %s", self._path, error)
 
 
 def recipe_from_row(index: int, row: pd.Series) -> RecipeDocument:
     title = str(row.get("title") or "Untitled recipe").strip()
     ingredients = _parse_list(row.get("NER")) or _parse_list(row.get("ingredients"))
     directions = _parse_list(row.get("directions"))
-    text = _recipe_text(title, ingredients, directions)
-    ingredient_text = " ".join(ingredients).lower()
+    resolved = canonicalize_all(ingredients)
+    profile = analyse(resolved.canonical, resolved.fully_recognised)
     direction_text = " ".join(directions).lower()
 
-    return RecipeDocument(
+    recipe = RecipeDocument(
         id=str(row.get("id") or row.get("Unnamed: 0") or index),
         title=title,
         ingredients=ingredients,
         directions=directions,
         source=_optional_str(row.get("source")),
         link=_optional_str(row.get("link")),
-        text=text,
-        diet_tags=_infer_diet_tags(ingredient_text),
-        allergens=_infer_allergens(ingredient_text),
+        text=_recipe_text(title, resolved.canonical or ingredients, directions),
+        canonical_ingredients=resolved.canonical,
+        unknown_ingredients=resolved.unknown,
+        diet_tags=profile.diet_tags,
+        diet_excluded=profile.diet_excluded,
+        allergens=profile.allergens,
+        allergen_free=profile.allergen_free,
         equipment=_infer_equipment(direction_text),
         cook_time_minutes=_infer_cook_time(direction_text),
-        cost_level=_infer_cost_level(ingredient_text),
+        cost_level=infer_cost_level(resolved.canonical),
     )
+    recipe.content_hash = content_hash(recipe)
+    return recipe
 
 
-def _upsert_batch(
+def _flush(
     repository: QdrantRecipeRepository,
     embedding_service: EmbeddingService,
     batch: list[RecipeDocument],
+    stats: IngestStats,
+    skip_unchanged: bool,
+    count_read: bool = True,
 ) -> None:
-    vectors = embedding_service.embed_documents([recipe.text for recipe in batch])
-    repository.upsert_recipes(batch, vectors)
-    logger.info("Upserted %s recipes", len(batch))
+    if count_read:
+        stats.read += len(batch)
+
+    pending = _changed_only(repository, batch) if skip_unchanged else batch
+    stats.skipped += len(batch) - len(pending)
+    if not pending:
+        logger.info("Skipped %s unchanged recipes", len(batch))
+        return
+
+    vectors = embedding_service.embed_documents(
+        [recipe.text for recipe in pending],
+        [" ".join(recipe.canonical_ingredients) for recipe in pending],
+    )
+    repository.upsert_recipes(pending, vectors)
+    stats.indexed += len(pending)
+    logger.info("Indexed %s recipes (%s unchanged)", len(pending), len(batch) - len(pending))
+
+
+def _changed_only(
+    repository: QdrantRecipeRepository,
+    batch: list[RecipeDocument],
+) -> list[RecipeDocument]:
+    """Drop recipes whose content matches what is already indexed."""
+    indexed = repository.existing_hashes([recipe_point_id(recipe) for recipe in batch])
+    return [
+        recipe
+        for recipe in batch
+        if indexed.get(recipe_point_id(recipe)) != recipe.content_hash
+    ]
 
 
 def _parse_list(value: object) -> list[str]:
@@ -209,39 +266,6 @@ def _recipe_text(title: str, ingredients: list[str], directions: list[str]) -> s
     )
 
 
-def _infer_diet_tags(ingredient_text: str) -> list[str]:
-    tags: list[str] = []
-    has_meat = _contains_any(ingredient_text, MEAT_KEYWORDS | SEAFOOD_KEYWORDS)
-    has_dairy_or_egg = _contains_any(ingredient_text, DAIRY_EGG_KEYWORDS)
-
-    if not has_meat:
-        tags.append("vegetarian")
-    if not has_meat and not has_dairy_or_egg:
-        tags.append("vegan")
-    if not has_meat and not has_dairy_or_egg and not _contains_any(
-        ingredient_text, JAIN_EXCLUDED_KEYWORDS
-    ):
-        tags.append("jain")
-    if not _contains_any(ingredient_text, HARAM_KEYWORDS):
-        tags.append("halal")
-    if not _contains_any(ingredient_text, GLUTEN_KEYWORDS):
-        tags.append("gluten_free")
-    if not _contains_any(ingredient_text, CARB_KEYWORDS):
-        tags.append("keto")
-    if not _contains_any(ingredient_text, SUGAR_KEYWORDS):
-        tags.append("diabetes_friendly")
-    return tags
-
-
-def _infer_allergens(ingredient_text: str) -> list[str]:
-    allergens = [
-        allergen
-        for allergen, keywords in ALLERGEN_KEYWORDS.items()
-        if _contains_any(ingredient_text, keywords)
-    ]
-    return sorted(allergens)
-
-
 def _infer_equipment(direction_text: str) -> list[str]:
     equipment = [
         equipment_name
@@ -264,15 +288,6 @@ def _infer_cook_time(direction_text: str) -> int | None:
     if not values:
         return None
     return min(max(values), 1440)
-
-
-def _infer_cost_level(ingredient_text: str) -> str:
-    expensive_count = sum(1 for keyword in EXPENSIVE_KEYWORDS if keyword in ingredient_text)
-    if expensive_count >= 2:
-        return "high"
-    if expensive_count == 1:
-        return "medium"
-    return "low"
 
 
 def _contains_any(text: str, keywords: Iterable[str]) -> bool:

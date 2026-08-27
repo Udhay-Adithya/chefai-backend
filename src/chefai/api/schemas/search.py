@@ -25,6 +25,14 @@ class SearchConstraints(BaseModel):
     budget: BudgetLevel | None = None
     strict_equipment: bool = True
     strict_budget: bool = False
+    assume_staples: bool = Field(
+        default=True,
+        description="Treat salt, water, oil and similar as always available.",
+    )
+    require_makeable: bool = Field(
+        default=False,
+        description="Return only recipes with no missing or unverifiable ingredients.",
+    )
 
     @field_validator("allergies", "equipment", mode="before")
     @classmethod

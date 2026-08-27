@@ -1,6 +1,5 @@
 from functools import lru_cache
 
-from pydantic import Field, HttpUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -10,7 +9,7 @@ class Settings(BaseSettings):
     app_name: str = "ChefAI"
     environment: str = "local"
 
-    qdrant_url: HttpUrl = Field(default="http://localhost:6333")
+    qdrant_url: str = "http://localhost:6333"
     qdrant_api_key: str | None = None
     qdrant_collection: str = "recipes"
 
@@ -23,12 +22,14 @@ class Settings(BaseSettings):
     default_limit: int = 10
     max_limit: int = 50
 
-    db_name: str = "cookai"
-    db_user: str = "postgres"
-    db_password: str = "root"
-    db_host: str = "localhost"
-    db_port: int = 5432
+    # The cross-encoder scores passage relevance to a question, which is not the
+    # same thing as ingredient feasibility, and it costs real latency. Off by
+    # default; enable it only with eval numbers showing it helps.
+    rerank_enabled: bool = False
 
+    # Retrieval scores are tie-breakers over the deterministic domain score.
+    hybrid_weight: float = 0.15
+    rerank_weight: float = 0.10
 
 
 @lru_cache

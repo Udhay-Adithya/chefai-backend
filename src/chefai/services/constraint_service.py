@@ -1,4 +1,5 @@
 from chefai.api.schemas.search import BudgetLevel, SearchConstraints
+from chefai.data.ingredients import canonicalize_all, drop_staples
 from chefai.services.types import SearchCandidate
 
 DIET_TAG_FIELDS = {
@@ -17,12 +18,34 @@ BUDGET_ORDER = {
     "high": 3,
 }
 
+# Weights for the deterministic part of the ranking. Ingredient feasibility
+# dominates: a recipe the user cannot cook is not a useful result however
+# semantically similar it is.
+COVERAGE_WEIGHT = 0.45
+PANTRY_USE_WEIGHT = 0.10
+MISSING_PENALTY = 0.05
+MISSING_PENALTY_CAP = 10
+UNVERIFIABLE_PENALTY = 0.02
+UNVERIFIABLE_PENALTY_CAP = 5
+
 
 class ConstraintService:
     def passes_post_filters(self, payload: dict, constraints: SearchConstraints) -> bool:
-        allergens = set(payload.get("allergens") or [])
-        if allergens.intersection(constraints.allergies):
-            return False
+        """Re-check hard constraints on retrieved payloads.
+
+        This duplicates the store-side filter on purpose. Diet and allergen
+        exclusions are the constraints where a leak actually harms someone, so
+        they are enforced again on the way out rather than trusted to one layer.
+        """
+        verified_diets = set(payload.get("diet_tags") or [])
+        for field_name, tag in DIET_TAG_FIELDS.items():
+            if getattr(constraints, field_name) and tag not in verified_diets:
+                return False
+
+        if constraints.allergies:
+            cleared = set(payload.get("allergen_free") or [])
+            if not set(constraints.allergies).issubset(cleared):
+                return False
 
         if constraints.strict_equipment and constraints.equipment:
             required_equipment = set(payload.get("equipment") or [])
@@ -42,14 +65,26 @@ class ConstraintService:
         query_ingredients: list[str],
         constraints: SearchConstraints,
     ) -> SearchCandidate:
-        recipe_ingredients = self._ingredient_set(candidate.payload.get("ingredients") or [])
-        query_set = self._ingredient_set(query_ingredients)
+        pantry = set(canonicalize_all(query_ingredients).canonical)
+        recipe_names, unverifiable = self._recipe_ingredients(candidate.payload)
 
-        matched = sorted(query_set.intersection(recipe_ingredients))
-        missing = sorted(recipe_ingredients.difference(query_set))
-        coverage = len(matched) / len(query_set) if query_set else 0.0
+        # Staples are assumed on hand, so their absence from the pantry list
+        # must not make an otherwise cookable recipe look unmakeable.
+        required = drop_staples(recipe_names) if constraints.assume_staples else recipe_names
+        required_set = set(required)
+        matched = sorted(required_set.intersection(pantry))
+        missing = sorted(required_set.difference(pantry))
 
-        score = coverage * 0.35
+        # Coverage of the recipe, not of the pantry: a thirty-ingredient recipe
+        # that happens to contain the user's three ingredients is not makeable.
+        recipe_coverage = len(matched) / len(required_set) if required_set else 1.0
+        used = pantry.intersection(recipe_names)
+        pantry_coverage = len(used) / len(pantry) if pantry else 0.0
+
+        score = recipe_coverage * COVERAGE_WEIGHT
+        score += pantry_coverage * PANTRY_USE_WEIGHT
+        score -= min(len(missing), MISSING_PENALTY_CAP) * MISSING_PENALTY
+        score -= min(len(unverifiable), UNVERIFIABLE_PENALTY_CAP) * UNVERIFIABLE_PENALTY
         score += self._diet_score(candidate.payload, constraints)
         score += self._equipment_score(candidate.payload, constraints)
         score += self._budget_score(candidate.payload, constraints)
@@ -57,9 +92,25 @@ class ConstraintService:
 
         candidate.matched_ingredients = matched
         candidate.missing_ingredients = missing[:20]
-        candidate.ingredient_coverage = coverage
+        candidate.unverifiable_ingredients = unverifiable[:20]
+        candidate.recipe_coverage = recipe_coverage
+        candidate.pantry_coverage = pantry_coverage
+        candidate.makeable = not missing and not unverifiable
         candidate.domain_score = score
         return candidate
+
+    def _recipe_ingredients(self, payload: dict) -> tuple[list[str], list[str]]:
+        """Canonical ingredient names for a recipe, plus the ones we could not map.
+
+        Prefers names written at ingest time; older points are normalised on the
+        fly so a re-index is not required to benefit from the fix.
+        """
+        stored = payload.get("canonical_ingredients")
+        if stored:
+            return list(stored), list(payload.get("unknown_ingredients") or [])
+
+        resolved = canonicalize_all(list(payload.get("ingredients") or []))
+        return resolved.canonical, resolved.unknown
 
     def _diet_score(self, payload: dict, constraints: SearchConstraints) -> float:
         tags = set(payload.get("diet_tags") or [])
@@ -98,6 +149,3 @@ class ConstraintService:
         recipe_cost = BUDGET_ORDER.get(str(cost_level or "medium"), 2)
         requested_cost = BUDGET_ORDER[budget.value]
         return recipe_cost <= requested_cost
-
-    def _ingredient_set(self, ingredients: list[str]) -> set[str]:
-        return {ingredient.strip().lower() for ingredient in ingredients if ingredient.strip()}
